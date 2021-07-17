@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version "${versionSpringBoot}"
+}
+
+group 'org.tibid'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor "org.projectlombok:lombok:$versionLombok"
+    compileOnly "org.projectlombok:lombok:$versionLombok"
+    compile('org.springframework.boot:spring-boot-starter')
+    implementation 'com.h2database:h2'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtime 'com.h2database:h2'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
