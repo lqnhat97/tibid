@@ -5,5 +5,6 @@
 
 ## Open h2 db:
 - Go to `{domain}:{port}/h2` eg: http://localhost:8080/h2
+  - Account/password: `tibid`
 - Set schema at: `resource/schema.sql`
 - Init default data at: `resource/data.sql`
