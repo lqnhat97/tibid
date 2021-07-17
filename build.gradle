@@ -17,6 +17,9 @@ dependencies {
     implementation 'com.h2database:h2'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.data:spring-data-jpa'
+    implementation 'org.hibernate:hibernate-core-jakarta:5.5.3.Final'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:3.0.0'
     runtime 'com.h2database:h2'
 }
 
