@@ -15,6 +15,7 @@ CREATE TABLE `bid_order` (
 
 CREATE TABLE `bid_ticket` (
   `id` int PRIMARY KEY,
+  `user_id` int UNIQUE NOT NULL,
   `bid_order_id` int UNIQUE NOT NULL,
   `price` float8,
   `status` varchar(255) COMMENT 'BIDDING, SUCCESSFUL',
