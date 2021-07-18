@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "Ticket")
+@Table(name = "bid_ticket")
 public class BidTicketEntity extends BaseEntity{
 
     @Column(name = "user_id")
