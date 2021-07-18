@@ -1,9 +1,11 @@
 package org.tibid.mapper.impl;
 
+import org.springframework.stereotype.Component;
 import org.tibid.dto.BidTicketDto;
 import org.tibid.entity.BidTicketEntity;
 import org.tibid.mapper.BidTicketMapper;
 
+@Component
 public class BidTicketMapperImpl implements BidTicketMapper {
 	@Override
 	public BidTicketDto toDto(BidTicketEntity entity) {

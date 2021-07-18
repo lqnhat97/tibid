@@ -9,11 +9,15 @@ spring:
     console:
       enabled: true
       path: /h2
-  jpa:
-    generate-ddl: true
-    hibernate:
-      ddl-auto: create
-    database-platform: org.hibernate.dialect.H2Dialect
+hibernate:
+  dialect: org.hibernate.dialect.H2Dialect
+  show_sql: true
+  hbm2ddl:
+    auto: create-drop
+  cache:
+    use_second_level_cache: true
+    use_query_cache: true
+    region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
 server:
   port: 8080
 
