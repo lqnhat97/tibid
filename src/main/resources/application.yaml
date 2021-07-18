@@ -16,3 +16,10 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
 server:
   port: 8080
+
+kafka:
+  bootstrapAddress: localhost:9092
+  topic:
+    name:
+     bidorder: bid_order_status
+     bidticket: bid_ticket_status

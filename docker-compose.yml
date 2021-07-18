@@ -1,65 +1,77 @@
 version: "3"
 
 services:
- zookeeper:
-  image: 'bitnami/zookeeper:latest'
-  hostname: zookeeper
-  restart: always
-  container_name: zk-server
-  ports:
-   - '2181:2181'
-  expose:
-   - '2181'
-  environment:
-   - ALLOW_ANONYMOUS_LOGIN=yes
-   - KAFKA_ZOOKEEPER_PROTOCOL=SASL
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    hostname: zookeeper
+    restart: always
+    container_name: zk-server
+    ports:
+      - '2181:2181'
+    expose:
+      - '2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
 
- kafka:
-  image: 'bitnami/kafka:latest'
-  container_name: bk-server
-  hostname: kafka
-  depends_on:
-   - "zookeeper"
-  ports:
-   - '9092:9092'
-   - '9082:9082'
-  expose:
-   - '9092'
-   - '9082'
-  volumes:
-   - './certificates/store:/bitnami/kafka/config/certs'
-   - './log/kafka-log:/bitnami/kafka'
-  environment:
-   - ALLOW_PLAINTEXT_LISTENER=yes
-   - KAFKA_CFG_BROKER_ID=1
-   - KAFKA_CFG_NUM_NETWORK_THREADS=3
-   - KAFKA_CFG_NUM_IO_THREADS=8
-   - KAFKA_CFG_SOCKET_SE=102400
-   - KAFKA_CFG_SOCKET_RECEIVE_BUFFER_BYTES=102400
-   - KAFKA_CFG_SOCKET_REQUEST_MAX_BYTES=104857600
-   - KAFKA_CFG_LOG_DIRS=/home/test/kafka-log
-   - KAFKA_CFG_NUM_PARTITIONS=1
-   - KAFKA_CFG_NUM_RECOVERY_THREADS_PER_DATA_DIR=1
-   - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=1
-   - KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
-   - KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR=1
-   - KAFKA_CFG_LOG_RETENTION_HOURS=168
-   - KAFKA_CFG_LOG_RETENTION_CHECK_INTERVAL_MS=300000
-   - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-   - KAFKA_CFG_ZOOKEEPER_CONNECTION_TIMEOUT_MS=6000
-   - KAFKA_CFG_SSL_KEYSTORE_LOCATION=/opt/bitnami/kafka/conf/certs/kafka.keystore.jks
-   - KAFKA_CFG_SSL_TRUSTSTORE_LOCATION=/opt/bitnami/kafka/conf/certs/kafka.truststore.jks
-   - KAFKA_CFG_SSL_KEYSTORE_PASSWORD=TEST1234
-   - KAFKA_CFG_SSL_TRUSTSTORE_PASSWORD=TEST1234
-   - KAFKA_CFG_LISTENERS=SSL://kafka:9092
-   - KAFKA_CFG_ADVERTISED_LISTENERS=SSL://kafka:9092
-   - KAFKA_CERTIFICATE_PASSWORD=TEST1234
-   - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
-   - KAFKA_CFG_SSL_KEY_PASSWORD=TEST1234
-   - KAFKA_CFG_SSL_ENABLED_PROTOCOLS=TLSv1.2
-   - KAFKA_CFG_SSL_KEYSTORE_TYPE=JKS
-   - KAFKA_CFG_SSL_TRUSTSTORE_TYPE=JKS
-   - KAFKA_CFG_SSL_CLIENT_AUTH=required
-   - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=SSL:SSL
-   - KAFKA_CFG_SECURITY_INTER_BROKER_PROTOCOL=SSL
-   - KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM=
+  kafka:
+    image: 'bitnami/kafka:latest'
+    container_name: bk-server
+    hostname: kafka
+    depends_on:
+      - "zookeeper"
+    ports:
+      - '9092:9092'
+      - '9093:9093'
+      - '9094:9094'
+      - '9082:9082'
+    expose:
+      - '9092'
+      - '9093'
+      - '9094'
+      - '9082'
+    volumes:
+      - './certificates/store:/opt/bitnami/kafka/config/certs'
+      - './log/kafka-log:/opt/bitnami/kafka/log'
+    environment:
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_BROKER_ID=1
+      - KAFKA_CFG_NUM_NETWORK_THREADS=3
+      - KAFKA_CFG_NUM_IO_THREADS=8
+      - KAFKA_CFG_SOCKET_SE=102400
+      - KAFKA_CFG_SOCKET_RECEIVE_BUFFER_BYTES=102400
+      - KAFKA_CFG_SOCKET_REQUEST_MAX_BYTES=104857600
+      - KAFKA_CFG_LOG_DIRS=/opt/bitnami/kafka/log
+      - KAFKA_CFG_NUM_PARTITIONS=1
+      - KAFKA_CFG_NUM_RECOVERY_THREADS_PER_DATA_DIR=1
+      - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR=1
+      - KAFKA_CFG_LOG_RETENTION_HOURS=168
+      - KAFKA_CFG_LOG_RETENTION_CHECK_INTERVAL_MS=300000
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_ZOOKEEPER_CONNECTION_TIMEOUT_MS=6000
+      - KAFKA_CFG_SSL_KEYSTORE_LOCATION=/opt/bitnami/kafka/config/certs/kafka.keystore.jks
+      - KAFKA_CFG_SSL_TRUSTSTORE_LOCATION=/opt/bitnami/kafka/config/certs/kafka.truststore.jks
+      - KAFKA_CFG_SSL_KEYSTORE_PASSWORD=TEST1234
+      - KAFKA_CFG_SSL_TRUSTSTORE_PASSWORD=TEST1234
+      - KAFKA_CERTIFICATE_PASSWORD=TEST1234
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_CFG_SSL_KEY_PASSWORD=TEST1234
+      - KAFKA_CFG_SSL_ENABLED_PROTOCOLS=TLSv1.2
+      - KAFKA_CFG_SSL_KEYSTORE_TYPE=JKS
+      - KAFKA_CFG_SSL_TRUSTSTORE_TYPE=JKS
+      - KAFKA_CFG_SSL_CLIENT_AUTH=required
+      - KAFKA_CFG_SECURITY_INTER_BROKER_PROTOCOL=SSL
+      - KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM=
+      - KAFKA_SECURITY_PROTOCOL=SSL
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+#      - KAKFA_CFG_ZOOKEEPER_SSL_KEYSTORE_LOCATION=/opt/bitnami/kafka/config/certs/kafka.keystore.jks
+#      - KAFKA_CFG_ZOOKEEPER_SSL_TRUSTSTORE_LOCATION=/opt/bitnami/kafka/config/certs/kafka.truststore.jks
+#      - KAFKA_CFG_ZOOKEEPER_SSL_KEYSTORE_PASSWORD=TEST1234
+#      - KAFKA_CFG_ZOOKEEPER_SSL_TRUSTSTORE_PASSWORD=TEST1234
+#      - KAFKA_CFG_ZOOKEEPER_SSL_KEYSTORE_TYPE=JKS
+#      - KAFKA_CFG_ZOOKEEPER_SSL_TRUSTSTORE_TYPE=JKS
+

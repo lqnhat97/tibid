@@ -149,3 +149,5 @@ gradle-app.setting
 
 ### Gradle Patch ###
 **/build/
+
+log/*
