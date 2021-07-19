@@ -10,10 +10,13 @@ public class BidTicketMapperImpl implements BidTicketMapper {
 	@Override
 	public BidTicketDto toDto(BidTicketEntity entity) {
 		BidTicketDto dto = new BidTicketDto();
+		dto.setId(entity.getId());
 		dto.setUserId(entity.getUserId());
 		dto.setBidOrderId(entity.getBidOrderId());
 		dto.setPrice(entity.getPrice());
 		dto.setStatus(entity.getStatus());
+		dto.setCreatedAt(entity.getCreatedDate());
+		dto.setModifiedAt(entity.getUpdatedDate());
 		return dto;
 	}
 
