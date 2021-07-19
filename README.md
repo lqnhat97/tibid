@@ -3,8 +3,16 @@
 - Run `./gradlew clean build` to build 
 - Run `./gradlew bootRun` to run or run in Intellij
 
-## Open h2 db:
-- Go to `{domain}:{port}/h2` eg: http://localhost:8080/h2
-  - Account/password: `tibid`
-- Set schema at: `resource/schema.sql`
-- Init default data at: `resource/data.sql`
+## Database
+- To use db, go to `mariadb` and run docker compose file inside by the command: `docker compose up`
+- DB connection:
+  - Server Host: host.docker.internal
+  - Port: 9083
+  - Root user: root
+  - Root password: admin
+  - Database name: tibid
+  - Username: tibid
+  - Password: tibid
+
+## API
+- TBD
