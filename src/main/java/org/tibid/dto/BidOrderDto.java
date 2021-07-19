@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class BidOrderDto extends BaseDto {
+	private long id;
+
 	private int userId;
 
 	private int productId;
@@ -21,4 +23,8 @@ public class BidOrderDto extends BaseDto {
 	private String type;
 
 	private int bidQuantity;
+
+	private long createdAt;
+
+	private long modifiedAt;
 }

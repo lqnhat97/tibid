@@ -9,9 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
-import org.springframework.data.annotation.CreatedBy;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -27,21 +26,16 @@ public abstract class BaseEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long id;
+	private long id;
 
 	@CreatedDate
+	@Type(type = "java.lang.Long")
 	@Column(name = "created_at", nullable = false)
-	private Long createdDate;
-
-	@CreatedBy
-	@Column(name = "created_by", nullable = false)
-	private String createdBy;
+	private long createdDate;
 
 	@LastModifiedDate
+	@Type(type = "java.lang.Long")
 	@Column(name = "modified_at", nullable = false)
-	private Long updatedDate;
+	private long updatedDate;
 
-	@LastModifiedBy
-	@Column(name = "updated_by", nullable = false)
-	private String updateBy;
 }
