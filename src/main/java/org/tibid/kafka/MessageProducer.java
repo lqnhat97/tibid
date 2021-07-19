@@ -14,10 +14,10 @@ public class MessageProducer {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    @Value(value = "${kafka.topic.name.bidorder}")
+    @Value(value = "${spring.kafka.topic.name.bidorder}")
     private String topicBidOrderName;
 
-    @Value(value = "${kafka.topic.name.bidticket}")
+    @Value(value = "${spring.kafka.topic.name.bidticket}")
     private String topicBidTicketName;
 
 
