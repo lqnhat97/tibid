@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "Order")
+@Table(name = "bid_order")
 public class BidOrderEnity extends BaseEntity{
     @Column(name = "user_id")
     private int userId;
