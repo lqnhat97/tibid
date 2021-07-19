@@ -13,13 +13,13 @@ import java.util.Map;
 @Configuration
 public class KafkaTopicConfig {
 
-    @Value(value = "${kafka.bootstrapAddress}")
+    @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
 
-    @Value(value = "${kafka.topic.name.bidorder}")
+    @Value(value = "${spring.kafka.topic.name.bidorder}")
     private String bidOrderStatus;
 
-    @Value(value = "${kafka.topic.name.bidticket}")
+    @Value(value = "${spring.kafka.topic.name.bidticket}")
     private String bidTicketStatus;
 
     @Bean

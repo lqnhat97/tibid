@@ -61,8 +61,8 @@ public class JpaConfig {
 
 	final Properties additionalProperties() {
 		final Properties hibernateProperties = new Properties();
-		hibernateProperties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
-		hibernateProperties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
+		hibernateProperties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("spring.jpa.properties.hibernate.hbm2ddl.auto"));
+		hibernateProperties.setProperty("hibernate.dialect", env.getProperty("spring.jpa.properties.hibernate.dialect"));
 		hibernateProperties.setProperty("hibernate.cache.use_second_level_cache", "false");
 
 		return hibernateProperties;

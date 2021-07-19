@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  mariadb:
+    image: mariadb:${IMG_TAG}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-admin}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-tibid}
+      MYSQL_USER: ${MYSQL_USER:-tibid}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-tibid}
+    ports:
+      - ${DATABASE_HOST_PORT}:3306
+    # volumes:
+    #   - ./mariadb_data:/var/lib/mysql
+    restart: on-failure

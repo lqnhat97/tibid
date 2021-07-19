@@ -25,6 +25,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'com.querydsl:querydsl-jpa'
     implementation 'com.querydsl:querydsl-apt'
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
+
     annotationProcessor 'com.querydsl:querydsl-apt::jpa',
             'com.querydsl:querydsl-apt',
             'com.querydsl:querydsl-jpa',

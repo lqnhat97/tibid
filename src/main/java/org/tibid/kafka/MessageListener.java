@@ -15,13 +15,13 @@ public class MessageListener {
     private CountDownLatch latch = new CountDownLatch(3);
 
 
-    @KafkaListener(topics = "${kafka.topic.name.bidorder}", groupId="order",containerFactory = "orderKafkaListenerContainerFactory")
+    @KafkaListener(topics = "${spring.kafka.topic.name.bidorder}", groupId="order",containerFactory = "orderKafkaListenerContainerFactory")
     public void listenBidOrderStatus(String message) {
         LOGGER.info("Received Message: " + message);
         latch.countDown();
     }
 
-    @KafkaListener(topics = "${kafka.topic.name.bidticket}",groupId="ticket",containerFactory = "ticketKafkaListenerContainerFactory")
+    @KafkaListener(topics = "${spring.kafka.topic.name.bidticket}",groupId="ticket",containerFactory = "ticketKafkaListenerContainerFactory")
     public void listenBidTicketStatus(String message) {
         LOGGER.info("Received Message: " + message);
         latch.countDown();
