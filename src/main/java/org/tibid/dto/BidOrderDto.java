@@ -10,6 +10,8 @@ public class BidOrderDto extends BaseDto {
 
 	private int productId;
 
+	private String productName;
+
 	private float startPrice;
 
 	private float priceStep;
@@ -20,11 +22,13 @@ public class BidOrderDto extends BaseDto {
 
 	private long bidEndTime;
 
-	private String type;
-
 	private int bidQuantity;
 
 	private long createdAt;
 
 	private long modifiedAt;
+
+	private float ceilingPrice;
+
+	private String tikiInfo;
 }
