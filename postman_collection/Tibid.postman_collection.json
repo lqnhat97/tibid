@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "51184e99-4eeb-4ea1-b84e-82813eb48ae9",
+		"name": "Tibid",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"1\",\r\n    \"productId\": \"123\",\r\n    \"startPrice\": \"1000\",\r\n    \"priceStep\":\"10\",\r\n    \"status\":\"1\",\r\n    \"bidStartTime\":\"123123\",\r\n    \"bidEndTime\":\"14234234\",\r\n    \"bidQuantity\":\"2\",\r\n    \"productName\":\"Raau nè\",\r\n    \"ceilingPrice\": \"10000\",\r\n    \"tikiInfo\":\"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/orders",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add ticket",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"1\",\r\n    \"bidOrderId\": \"1\",\r\n    \"price\": \"100000\",\r\n    \"status\":\"10\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/tickets",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tickets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"searchCriteria\": {\r\n        \"productName\":\"\"\r\n    },\r\n    \"itemPerPage\":\"20\",\r\n    \"pageNum\":\"0\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/orders/search",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List sp",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "Z4evdG2qbNAUkIHiBVfwt3jloPK69MQx",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-source",
+						"value": "local",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.tiki.vn/seller-store/v2/collections/6/products?seller_id=18252&cursor=0&limit=20&delivery_zone=",
+					"protocol": "https",
+					"host": [
+						"api",
+						"tiki",
+						"vn"
+					],
+					"path": [
+						"seller-store",
+						"v2",
+						"collections",
+						"6",
+						"products"
+					],
+					"query": [
+						{
+							"key": "seller_id",
+							"value": "18252"
+						},
+						{
+							"key": "cursor",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "20"
+						},
+						{
+							"key": "delivery_zone",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get order by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/orders/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get ticket by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/tickets/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tickets",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Order by Id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/orders/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
