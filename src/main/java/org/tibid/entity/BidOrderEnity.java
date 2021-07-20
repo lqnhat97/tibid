@@ -18,11 +18,17 @@ public class BidOrderEnity extends BaseEntity{
     @Column(name = "product_id")
     private int productId;
 
+    @Column(name = "product_name")
+    private String productName;
+
     @Column(name = "start_price")
     private float startPrice;
 
     @Column(name = "price_step")
     private float priceStep;
+
+    @Column(name = "ceiling_price")
+    private float ceilingPrice;
 
     @Column(name = "status")
     private int status;
@@ -33,10 +39,6 @@ public class BidOrderEnity extends BaseEntity{
     @Column(name = "bid_end_time")
     private long bidEndTime;
 
-    @Column(name = "type")
-    private String type;
-
     @Column(name = "bid_quantity")
     private int bidQuantity;
-
 }

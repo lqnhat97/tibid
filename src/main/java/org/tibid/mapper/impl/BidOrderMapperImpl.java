@@ -18,17 +18,18 @@ public class BidOrderMapperImpl implements BidOrderMapper {
 		dto.setStatus(entity.getStatus());
 		dto.setBidStartTime(entity.getBidStartTime());
 		dto.setBidEndTime(entity.getBidEndTime());
-		dto.setType(entity.getType());
 		dto.setBidQuantity(entity.getBidQuantity());
 		dto.setCreatedAt(entity.getCreatedDate());
 		dto.setModifiedAt(entity.getUpdatedDate());
+		dto.setCeilingPrice(entity.getCeilingPrice());
+		dto.setProductName(entity.getProductName());
 		return dto;
 	}
 
 	@Override
 	public BidOrderEnity toEntity(BidOrderDto dto) {
 		BidOrderEnity entity = new BidOrderEnity();
-		if(0 != dto.getUserId()){
+		if (0 != dto.getUserId()) {
 			entity.setUserId(dto.getUserId());
 		}
 		entity.setProductId(dto.getProductId());
@@ -37,8 +38,9 @@ public class BidOrderMapperImpl implements BidOrderMapper {
 		entity.setStatus(dto.getStatus());
 		entity.setBidStartTime(dto.getBidStartTime());
 		entity.setBidEndTime(dto.getBidEndTime());
-		entity.setType(dto.getType());
 		entity.setBidQuantity(dto.getBidQuantity());
+		entity.setCeilingPrice(dto.getCeilingPrice());
+		entity.setProductName(dto.getProductName());
 		return entity;
 	}
 }

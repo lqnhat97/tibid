@@ -2,14 +2,27 @@ package org.tibid.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.tibid.dto.BidOrderDto;
 import org.tibid.dto.BidTicketDto;
+import org.tibid.filter.BaseSearchCriteria;
+import org.tibid.filter.OrdersSearchCriteria;
 import org.tibid.entity.tiki.ipn.request.IpnRequest;
 
 public interface TibidService {
 	BidTicketDto createBidTicket(BidTicketDto bidTicketDto);
+
 	BidOrderDto createBidOrder(BidOrderDto bidOrderDto);
-	List<BidOrderDto> searchBidOrder();
+
+	Page<BidOrderDto> searchBidOrder(BaseSearchCriteria<OrdersSearchCriteria> searchCriteria);
+
+	BidOrderDto getOrderById(long id);
+
+	BidTicketDto getTicketById(long id);
+
+	void deleteOrderById(long id);
+
+	void deleteTicketById(long id);
 
 	int updateBidOrder(IpnRequest ipnRequest);
 }
