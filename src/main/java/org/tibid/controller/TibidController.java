@@ -13,6 +13,7 @@ import org.tibid.dto.BidOrderDto;
 import org.tibid.dto.BidTicketDto;
 import org.tibid.filter.BaseSearchCriteria;
 import org.tibid.filter.OrdersSearchCriteria;
+import org.tibid.entity.tiki.ipn.request.IpnRequest;
 import org.tibid.kafka.MessageProducer;
 import org.tibid.service.TibidService;
 
@@ -79,5 +80,11 @@ public class TibidController {
 	public String kafkaTest2() {
 		producer.sendMessageBidTicketStatus("test message");
 		return "Sent!";
+	}
+
+	@PostMapping("/payment/ipn")
+	public ResponseEntity paymentIpn(@RequestBody IpnRequest ipnRequest){
+		tibidService.updateBidOrder(ipnRequest);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 }

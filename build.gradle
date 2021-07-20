@@ -27,6 +27,7 @@ dependencies {
     implementation 'com.querydsl:querydsl-jpa'
     implementation 'com.querydsl:querydsl-apt'
     implementation 'org.mariadb.jdbc:mariadb-java-client'
+    implementation 'com.google.code.gson:gson:2.8.7'
 
     annotationProcessor 'com.querydsl:querydsl-apt::jpa',
             'com.querydsl:querydsl-apt',
