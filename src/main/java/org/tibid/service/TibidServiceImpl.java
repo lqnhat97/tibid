@@ -9,6 +9,7 @@ import org.tibid.dto.BidOrderDto;
 import org.tibid.dto.BidTicketDto;
 import org.tibid.entity.BidOrderEnity;
 import org.tibid.entity.BidTicketEntity;
+import org.tibid.entity.tiki.ipn.request.IpnRequest;
 import org.tibid.mapper.BidOrderMapper;
 import org.tibid.mapper.BidTicketMapper;
 import org.tibid.repository.BidOrderRepo;
@@ -53,5 +54,15 @@ public class TibidServiceImpl implements TibidService {
 			resultList.add(bidOrderMapper.toDto(entity));
 		});
 		return resultList;
+	}
+
+	// Temporary find all
+	@Override
+	public int updateBidOrder(IpnRequest ipnRequest){
+
+		bidOrderRepo.findById(Long.parseLong(ipnRequest.getOrder().getId()));
+
+		//Update the id 
+		return 1;
 	}
 }
