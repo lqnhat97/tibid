@@ -16,6 +16,7 @@ import org.tibid.filter.OrdersSearchCriteria;
 import org.tibid.entity.tiki.ipn.request.IpnRequest;
 import org.tibid.kafka.MessageProducer;
 import org.tibid.service.TibidService;
+import org.tibid.service.tiki.TikiIntegrateService;
 
 @RestController
 public class TibidController {
@@ -24,9 +25,12 @@ public class TibidController {
 
 	private final TibidService tibidService;
 
-	public TibidController(MessageProducer producer, TibidService tibidService) {
+	private final TikiIntegrateService tikiIntegrateService;
+
+	public TibidController(MessageProducer producer, TibidService tibidService, TikiIntegrateService tikiIntegrateService) {
 		this.producer = producer;
 		this.tibidService = tibidService;
+		this.tikiIntegrateService = tikiIntegrateService;
 	}
 
 	@GetMapping("/")
@@ -85,6 +89,12 @@ public class TibidController {
 	@PostMapping("/payment/ipn")
 	public ResponseEntity paymentIpn(@RequestBody IpnRequest ipnRequest){
 		tibidService.updateBidOrder(ipnRequest);
+		return new ResponseEntity(HttpStatus.OK);
+	}
+
+	@PostMapping("/payment")
+	public ResponseEntity payment(@RequestBody BidOrderDto bidOrderDto){
+		tikiIntegrateService.createOrder(bidOrderDto);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 }

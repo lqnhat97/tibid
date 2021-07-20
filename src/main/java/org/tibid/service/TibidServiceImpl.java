@@ -2,7 +2,9 @@ package org.tibid.service;
 
 import java.util.Optional;
 
+import com.google.gson.Gson;
 import org.springframework.data.domain.Page;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tibid.dto.BidOrderDto;
@@ -28,6 +30,8 @@ public class TibidServiceImpl implements TibidService {
 	private final BidTicketMapper bidTicketMapper;
 
 	private final BidOrderMapper bidOrderMapper;
+
+	private final Gson gson=new Gson();
 
 	public TibidServiceImpl(BidTicketRepo bidTicketRepo, BidOrderRepo bidOrderRepo, BidTicketMapper bidTicketMapper, BidOrderMapper bidOrderMapper) {
 		this.bidTicketRepo = bidTicketRepo;
@@ -80,9 +84,11 @@ public class TibidServiceImpl implements TibidService {
 	@Override
 	public int updateBidOrder(IpnRequest ipnRequest){
 
-		bidOrderRepo.findById(Long.parseLong(ipnRequest.getOrder().getId()));
-
+		BidOrderEnity bidOrderEnity = bidOrderRepo.findByTikiOrderId(ipnRequest.getOrder().getId());
 		//Update the id
+		bidOrderEnity.setTikiOrderId(gson.toJson(ipnRequest.getOrder()));
+		bidOrderRepo.save(bidOrderEnity);
+
 		return 1;
 	}
 }
