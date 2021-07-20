@@ -60,7 +60,7 @@ public class TibidController {
 
 	@PostMapping("/payment/ipn")
 	public ResponseEntity paymentIpn(@RequestBody IpnRequest ipnRequest){
-		tibidService.updateBidOrder(ipnRequest)
+		tibidService.updateBidOrder(ipnRequest);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 }
