@@ -45,8 +45,8 @@ public class TibidController {
 	}
 
 	@DeleteMapping("/tickets/{id}")
-	public ResponseEntity<BidTicketDto> deleteTicketById(@PathVariable long id) {
-		return new ResponseEntity<>(tibidService.getTicketById(id), HttpStatus.OK);
+	public void deleteTicketById(@PathVariable long id) {
+		tibidService.deleteTicketById(id);
 	}
 
 	@PostMapping("/orders")
@@ -66,8 +66,8 @@ public class TibidController {
 	}
 
 	@DeleteMapping("/orders/{id}")
-	public ResponseEntity<BidOrderDto> deleteOrderById(@PathVariable long id) {
-		return new ResponseEntity<>(tibidService.getOrderById(id), HttpStatus.OK);
+	public void deleteOrderById(@PathVariable long id) {
+		tibidService.deleteOrderById(id);
 	}
 
 	@GetMapping("/kafka1")

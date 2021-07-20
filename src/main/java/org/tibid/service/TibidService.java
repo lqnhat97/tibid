@@ -1,5 +1,7 @@
 package org.tibid.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.tibid.dto.BidOrderDto;
 import org.tibid.dto.BidTicketDto;
@@ -21,7 +23,6 @@ public interface TibidService {
 	void deleteOrderById(long id);
 
 	void deleteTicketById(long id);
-	List<BidOrderDto> searchBidOrder();
 
 	int updateBidOrder(IpnRequest ipnRequest);
 }
