@@ -5,4 +5,5 @@ import org.tibid.entity.BidOrderEnity;
 
 @Repository
 public interface BidOrderRepo extends BaseRepo<BidOrderEnity>, BidOrderRepoCustom {
+    BidOrderEnity findByTikiOrderId(String tikiOrderId);
 }

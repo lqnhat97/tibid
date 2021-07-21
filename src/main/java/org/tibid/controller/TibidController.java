@@ -3,19 +3,19 @@ package org.tibid.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.tibid.dto.BidOrderDto;
 import org.tibid.dto.BidTicketDto;
+import org.tibid.entity.tiki.Order;
+import org.tibid.entity.tiki.request.TikiOrderRequest;
 import org.tibid.filter.BaseSearchCriteria;
 import org.tibid.filter.OrdersSearchCriteria;
 import org.tibid.entity.tiki.ipn.request.IpnRequest;
 import org.tibid.kafka.MessageProducer;
 import org.tibid.service.TibidService;
+import org.tibid.service.tiki.TikiIntegrateService;
+
+import java.util.List;
 
 @RestController
 public class TibidController {
@@ -24,9 +24,12 @@ public class TibidController {
 
 	private final TibidService tibidService;
 
-	public TibidController(MessageProducer producer, TibidService tibidService) {
+	private final TikiIntegrateService tikiIntegrateService;
+
+	public TibidController(MessageProducer producer, TibidService tibidService, TikiIntegrateService tikiIntegrateService) {
 		this.producer = producer;
 		this.tibidService = tibidService;
+		this.tikiIntegrateService = tikiIntegrateService;
 	}
 
 	@GetMapping("/")
@@ -84,7 +87,17 @@ public class TibidController {
 
 	@PostMapping("/payment/ipn")
 	public ResponseEntity paymentIpn(@RequestBody IpnRequest ipnRequest){
-		tibidService.updateBidOrder(ipnRequest);
-		return new ResponseEntity(HttpStatus.OK);
+		tibidService.updateBidOrderIpn(ipnRequest);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PostMapping("/payment")
+	public ResponseEntity<Order> payment(@RequestHeader(value = "auth-code") String authCode,
+										 @RequestBody TikiOrderRequest tikiOrderRequest){
+		List<BidTicketDto> bidTicketDtoList = tikiOrderRequest.getData();
+	    String customerId = tikiIntegrateService.getAuthToken(authCode);
+		Order tikiOrder = tikiIntegrateService.createOrder(bidTicketDtoList, customerId);
+		tibidService.updateBidOrder(tikiOrder, bidTicketDtoList);
+		return new ResponseEntity<>(tikiOrder, HttpStatus.OK);
 	}
 }

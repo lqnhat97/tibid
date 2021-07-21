@@ -1,7 +1,10 @@
 package org.tibid.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import com.google.gson.Gson;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +12,7 @@ import org.tibid.dto.BidOrderDto;
 import org.tibid.dto.BidTicketDto;
 import org.tibid.entity.BidOrderEnity;
 import org.tibid.entity.BidTicketEntity;
+import org.tibid.entity.tiki.Order;
 import org.tibid.filter.BaseSearchCriteria;
 import org.tibid.filter.OrdersSearchCriteria;
 import org.tibid.entity.tiki.ipn.request.IpnRequest;
@@ -28,6 +32,8 @@ public class TibidServiceImpl implements TibidService {
 	private final BidTicketMapper bidTicketMapper;
 
 	private final BidOrderMapper bidOrderMapper;
+
+	private final Gson gson=new Gson();
 
 	public TibidServiceImpl(BidTicketRepo bidTicketRepo, BidOrderRepo bidOrderRepo, BidTicketMapper bidTicketMapper, BidOrderMapper bidOrderMapper) {
 		this.bidTicketRepo = bidTicketRepo;
@@ -78,11 +84,32 @@ public class TibidServiceImpl implements TibidService {
 
 	// Temporary find all
 	@Override
-	public int updateBidOrder(IpnRequest ipnRequest){
+	public int updateBidOrderIpn(IpnRequest ipnRequest){
 
-		bidOrderRepo.findById(Long.parseLong(ipnRequest.getOrder().getId()));
-
+		BidOrderEnity bidOrderEnity = bidOrderRepo.findByTikiOrderId(ipnRequest.getOrder().getId());
 		//Update the id
+		bidOrderEnity.setTikiOrderId(gson.toJson(ipnRequest.getOrder()));
+		bidOrderRepo.save(bidOrderEnity);
+
 		return 1;
+	}
+
+	@Override
+	public  List<BidOrderEnity>  updateBidOrder(Order order, List<BidTicketDto> bidTicketDtoList){
+	    List<BidOrderEnity> result = new ArrayList<>();
+		for(BidTicketDto bidTicketDto : bidTicketDtoList) {
+			BidTicketEntity bidTicketEntity = bidTicketMapper.toEntity(bidTicketDto);
+
+			Optional<BidOrderEnity> bidOrderEnityOptional =bidOrderRepo.findById((long) bidTicketEntity.getBidOrderId());
+			BidOrderEnity bidOrderEnity = new BidOrderEnity();
+			if(bidOrderEnityOptional.isPresent()){
+				bidOrderEnity =  bidOrderEnityOptional.get();
+			}
+            bidOrderEnity.setTikiOrderId(order.getId());
+			bidOrderEnity.setTikiOrderInfo(gson.toJson(order));
+            result.add( bidOrderRepo.save(bidOrderEnity));
+		}
+		return result;
+
 	}
 }

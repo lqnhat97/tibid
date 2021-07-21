@@ -31,4 +31,8 @@ public class BidOrderDto extends BaseDto {
 	private float ceilingPrice;
 
 	private String tikiInfo;
+
+	private String tikiOrderInfo;
+
+	private String tikiOrderId;
 }

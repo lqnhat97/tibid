@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.tibid.dto.BidOrderDto;
 import org.tibid.dto.BidTicketDto;
+import org.tibid.entity.BidOrderEnity;
+import org.tibid.entity.tiki.Order;
 import org.tibid.filter.BaseSearchCriteria;
 import org.tibid.filter.OrdersSearchCriteria;
 import org.tibid.entity.tiki.ipn.request.IpnRequest;
@@ -24,5 +26,7 @@ public interface TibidService {
 
 	void deleteTicketById(long id);
 
-	int updateBidOrder(IpnRequest ipnRequest);
+	int updateBidOrderIpn(IpnRequest ipnRequest);
+
+	List<BidOrderEnity>  updateBidOrder(Order order, List<BidTicketDto> bidOrderDto);
 }
