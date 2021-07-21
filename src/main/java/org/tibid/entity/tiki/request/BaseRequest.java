@@ -2,14 +2,16 @@ package org.tibid.entity.tiki.request;
 
 import com.google.gson.annotations.SerializedName;
 import org.tibid.entity.tiki.Address;
-import org.tibid.entity.tiki.Items;
+import org.tibid.entity.tiki.Item;
+
+import java.util.List;
 
 public class BaseRequest {
     @SerializedName(value="customer_id")
     private String customerId;
 
     @SerializedName(value="items")
-    private Items items;
+    private List<Item> items;
 
     @SerializedName(value="shipping_address")
     private Address shippingAddress;
@@ -23,6 +25,16 @@ public class BaseRequest {
     @SerializedName(value="reference_id")
     private String referenceId;
 
+    private String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getCustomerId() {
         return customerId;
     }
@@ -31,11 +43,11 @@ public class BaseRequest {
         this.customerId = customerId;
     }
 
-    public Items getItems() {
+    public List<Item> getItems() {
         return items;
     }
 
-    public void setItems(Items items) {
+    public void setItems(List<Item> items) {
         this.items = items;
     }
 

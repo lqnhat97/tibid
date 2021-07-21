@@ -28,6 +28,10 @@ dependencies {
     implementation 'com.querydsl:querydsl-apt'
     implementation 'org.mariadb.jdbc:mariadb-java-client'
     implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'org.apache.httpcomponents:httpclient'
+    implementation 'org.apache.httpcomponents:httpcore'
+    implementation 'commons-codec:commons-codec'
+    implementation 'org.apache.commons:commons-pool2:2.4.2'
 
     annotationProcessor 'com.querydsl:querydsl-apt::jpa',
             'com.querydsl:querydsl-apt',

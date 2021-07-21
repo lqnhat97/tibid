@@ -1,6 +1,6 @@
 package org.tibid.entity.tiki;
 
-public class Items {
+public class Item {
     private String name;
     private String sku;
     private Integer quantity;

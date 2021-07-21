@@ -31,6 +31,12 @@ spring:
     username: tibid
     password: tibid
 
+tiki:
+  base-url: https://api.tiki.vn/tiniapp-open-api
+  create-order-path: /order
+  exchange-auth-token: /oauth/auth/token
+  client-id: ZPg7eeQtZxKDeTvxDYaHjSex9ltY4UfD
+  client-secret: RfeEW4trxWcTdccOSXVGdlPMzwyP3pdRizycP6c4k9pSr9Zu6bg80RpejzQup7SB
 
 server:
   port: 8080
