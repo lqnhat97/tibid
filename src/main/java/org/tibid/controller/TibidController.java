@@ -1,5 +1,6 @@
 package org.tibid.controller;
 
+import org.h2.util.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,9 @@ import org.tibid.kafka.MessageProducer;
 import org.tibid.service.TibidService;
 import org.tibid.service.tiki.TikiIntegrateService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class TibidController {
@@ -92,10 +95,15 @@ public class TibidController {
 	}
 
 	@PostMapping("/payment")
-	public ResponseEntity<Order> payment(@RequestHeader(value = "auth-code") String authCode,
-										 @RequestBody TikiOrderRequest tikiOrderRequest){
+	public ResponseEntity payment(@RequestHeader(value = "auth-code") String authCode,
+								  @RequestBody TikiOrderRequest tikiOrderRequest){
 		List<BidTicketDto> bidTicketDtoList = tikiOrderRequest.getData();
 	    String customerId = tikiIntegrateService.getAuthToken(authCode);
+	    if(StringUtils.isNullOrEmpty(customerId)){
+			Map<String, String> data = new HashMap<>();
+			data.put("message", "CustomerId not found");
+			return new ResponseEntity(data, HttpStatus.BAD_REQUEST);
+		}
 		Order tikiOrder = tikiIntegrateService.createOrder(bidTicketDtoList, customerId);
 		tibidService.updateBidOrder(tikiOrder, bidTicketDtoList);
 		return new ResponseEntity<>(tikiOrder, HttpStatus.OK);

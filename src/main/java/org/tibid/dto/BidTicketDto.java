@@ -6,9 +6,9 @@ import lombok.Data;
 public class BidTicketDto extends BaseDto {
 	private long id;
 
-	private int userId;
+	private long userId;
 
-	private int bidOrderId;
+	private long bidOrderId;
 
 	private float price;
 

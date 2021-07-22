@@ -90,10 +90,10 @@ public class TikiIntegrateServiceImpl implements TikiIntegrateService {
             for(BidTicketDto bidTicketDto : bidTicketDtoList) {
                 BidTicketEntity bidTicketEntity = bidTicketMapper.toEntity(bidTicketDto);
 
-                Optional<BidOrderEnity> bidOrderEnityOptional =bidOrderRepo.findById((long) bidTicketEntity.getBidOrderId());
+                Optional<BidOrderEnity> bidOrderEntityOptional = bidOrderRepo.findById(bidTicketEntity.getBidOrderId());
                 BidOrderEnity bidOrderEnity = new BidOrderEnity();
-                if(bidOrderEnityOptional.isPresent()){
-                    bidOrderEnity =  bidOrderEnityOptional.get();
+                if(bidOrderEntityOptional.isPresent()){
+                    bidOrderEnity =  bidOrderEntityOptional.get();
                 }
 
 
