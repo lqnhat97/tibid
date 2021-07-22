@@ -9,13 +9,13 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.tibid.dto.BidOrderDto;
 import org.tibid.dto.BidTicketDto;
 import org.tibid.entity.BidOrderEnity;
 import org.tibid.entity.BidTicketEntity;
 import org.tibid.entity.tiki.Item;
 import org.tibid.entity.tiki.Order;
 import org.tibid.entity.tiki.request.BaseRequest;
+import org.tibid.entity.tiki.request.CompleteRequest;
 import org.tibid.entity.tiki.response.BaseResponse;
 import org.tibid.mapper.BidOrderMapper;
 import org.tibid.mapper.BidTicketMapper;
@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.security.Signature;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,6 +53,9 @@ public class TikiIntegrateServiceImpl implements TikiIntegrateService {
 
     @Value(value = "${tiki.client-secret}")
     private String clientSecret;
+
+    @Value(value = "${order-complete}")
+    private String orderCompletePath;
 
     public static final String HEADER_CONTENT_TYPE = "application/json";
 
@@ -87,13 +89,13 @@ public class TikiIntegrateServiceImpl implements TikiIntegrateService {
             BaseRequest baseRequest = new BaseRequest();
             baseRequest.setCustomerId(customerId);
             List<Item> itemList = new ArrayList<>();
-            for(BidTicketDto bidTicketDto : bidTicketDtoList) {
+            for (BidTicketDto bidTicketDto : bidTicketDtoList) {
                 BidTicketEntity bidTicketEntity = bidTicketMapper.toEntity(bidTicketDto);
 
                 Optional<BidOrderEnity> bidOrderEntityOptional = bidOrderRepo.findById(bidTicketEntity.getBidOrderId());
                 BidOrderEnity bidOrderEnity = new BidOrderEnity();
-                if(bidOrderEntityOptional.isPresent()){
-                    bidOrderEnity =  bidOrderEntityOptional.get();
+                if (bidOrderEntityOptional.isPresent()) {
+                    bidOrderEnity = bidOrderEntityOptional.get();
                 }
 
 
@@ -129,7 +131,7 @@ public class TikiIntegrateServiceImpl implements TikiIntegrateService {
                             .collect(Collectors.joining("\n"));
                     Logger.getLogger(this.getClass().getName()).info(gson.toJson(result));
                     baseResponse = gson.fromJson(result, BaseResponse.class);
-                    if(baseResponse.getError()!=null){
+                    if (baseResponse.getError() != null) {
                         return null;
                     }
                 }
@@ -152,7 +154,7 @@ public class TikiIntegrateServiceImpl implements TikiIntegrateService {
             String timestamp = Long.toString(System.currentTimeMillis());
             String payload = timestamp + "." + clientId + "." + gson.toJson(baseRequest);
             String signature = SignatureUtils.sign(clientSecret, payload);
-            Logger.getLogger(TikiIntegrateServiceImpl.class.getName()).info("signature: "+signature);
+            Logger.getLogger(TikiIntegrateServiceImpl.class.getName()).info("signature: " + signature);
 
             List<NameValuePair> headers = new ArrayList<>();
             headers.add(new BasicNameValuePair(HttpHeaders.CONTENT_TYPE, HEADER_CONTENT_TYPE));
@@ -173,7 +175,7 @@ public class TikiIntegrateServiceImpl implements TikiIntegrateService {
                             new InputStreamReader(inStream, StandardCharsets.UTF_8)).readLine();
                     Logger.getLogger(this.getClass().getName()).info(gson.toJson(result));
                     baseResponse = gson.fromJson(result, BaseResponse.class);
-                    if(baseResponse.getError()!=null){
+                    if (baseResponse.getError() != null) {
                         return null;
                     }
                 }
@@ -183,6 +185,86 @@ public class TikiIntegrateServiceImpl implements TikiIntegrateService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public Order completeOrder(String orderId) {
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            CompleteRequest baseRequest = new CompleteRequest();
+            baseRequest.setOrderId(orderId);
+            baseRequest.setComment("Giao hàng thành công");
+            String timestamp = Long.toString(System.currentTimeMillis());
+            String payload = timestamp + "." + clientId + "." + gson.toJson(baseRequest);
+            String signature = SignatureUtils.sign(clientSecret, payload);
+
+            List<NameValuePair> headers = new ArrayList<>();
+            headers.add(new BasicNameValuePair(HttpHeaders.CONTENT_TYPE, HEADER_CONTENT_TYPE));
+            headers.add(new BasicNameValuePair(HEADER_CLIENT_ID, clientId));
+            headers.add(new BasicNameValuePair(HEADER_SIGNATURE, signature));
+            headers.add(new BasicNameValuePair(HEADER_TIMESTAMP, timestamp));
+            String url = baseUrl + exchangeAuthToken;
+
+            Logger.getLogger(this.getClass().getName()).info(gson.toJson(baseRequest));
+
+            HttpResponse response = HttpUtils.postJson(headers, url, gson.toJson(baseRequest), 120000);
+            HttpEntity respEntity = response.getEntity();
+            if (respEntity != null) {
+                try (InputStream inStream = respEntity.getContent()) {
+                    String result = new BufferedReader(
+                            new InputStreamReader(inStream, StandardCharsets.UTF_8)).readLine();
+                    Logger.getLogger(this.getClass().getName()).info(gson.toJson(result));
+                    baseResponse = gson.fromJson(result, BaseResponse.class);
+                    if (baseResponse.getError() != null) {
+                        return null;
+                    }
+                }
+            }
+            return baseResponse.getData().getOrder();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Order queryTikiOrder(long orderId) {
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            String path = String.format("%s?order_id=%s", createOrderPath, orderId);
+            String timestamp = Long.toString(System.currentTimeMillis());
+            String url = baseUrl + path;
+            String payload = timestamp + "." + clientId + "." + path;
+            String signature = SignatureUtils.sign(clientSecret, payload);
+
+            List<NameValuePair> headers = new ArrayList<>();
+            headers.add(new BasicNameValuePair(HttpHeaders.CONTENT_TYPE, HEADER_CONTENT_TYPE));
+            headers.add(new BasicNameValuePair(HEADER_CLIENT_ID, clientId));
+            headers.add(new BasicNameValuePair(HEADER_SIGNATURE, signature));
+            headers.add(new BasicNameValuePair(HEADER_TIMESTAMP, timestamp));
+
+            Logger.getLogger(this.getClass().getName()).info(path);
+
+            HttpResponse response = null;
+
+            response = HttpUtils.getJson(headers, url, 120000);
+
+            HttpEntity respEntity = response.getEntity();
+            if (respEntity != null) {
+                try (InputStream inStream = respEntity.getContent()) {
+                    String result = new BufferedReader(
+                            new InputStreamReader(inStream, StandardCharsets.UTF_8)).readLine();
+                    Logger.getLogger(this.getClass().getName()).info(gson.toJson(result));
+                    baseResponse = gson.fromJson(result, BaseResponse.class);
+                    if (baseResponse.getError() != null) {
+                        return null;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return baseResponse.getData().getOrder();
     }
 
 }
