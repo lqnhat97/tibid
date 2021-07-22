@@ -5,6 +5,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -45,6 +46,21 @@ public class HttpUtils {
 //                    zp2EIBAResponse.responseBody = result;
 //                }
 //            }
+        }
+        return response;
+    }
+
+    public static HttpResponse getJson(List<NameValuePair> nvps, String url, int timeout) throws IOException {
+        HttpResponse response;
+
+        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(timeout).setConnectTimeout(timeout)
+                .setConnectionRequestTimeout(timeout).setStaleConnectionCheckEnabled(true).build();
+
+        try (CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build()) {
+
+            HttpGet httpget = new HttpGet(url);
+            nvps.forEach(item -> httpget.addHeader(item.getName(), item.getValue()));
+            response = httpclient.execute(httpget);
         }
         return response;
     }

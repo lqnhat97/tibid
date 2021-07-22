@@ -1,8 +1,5 @@
 package org.tibid.service.tiki;
 
-import org.springframework.stereotype.Service;
-import org.tibid.dto.BidOrderDto;
-
 import org.tibid.dto.BidTicketDto;
 import org.tibid.entity.tiki.Order;
 
@@ -12,4 +9,8 @@ public interface TikiIntegrateService {
     Order createOrder(List<BidTicketDto> bidTicketDtoList, String customerId);
 
     String getAuthToken(String authCode);
+
+    Order completeOrder(String orderId);
+
+    Order queryTikiOrder(long orderId);
 }

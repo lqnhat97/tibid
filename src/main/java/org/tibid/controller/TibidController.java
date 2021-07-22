@@ -105,4 +105,10 @@ public class TibidController {
 		tibidService.updateBidOrderFromTiki(tikiOrder, bidTicketDtoList);
 		return new ResponseEntity<>(tikiOrder, HttpStatus.OK);
 	}
+
+	@GetMapping("/tiki/order/{orderId}")
+	public ResponseEntity queryTikiOrder(@PathVariable long orderId){
+		tikiIntegrateService.queryTikiOrder(orderId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }

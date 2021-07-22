@@ -35,6 +35,7 @@ tiki:
   base-url: https://api.tiki.vn/tiniapp-open-api
   create-order-path: /order
   exchange-auth-token: /oauth/auth/token
+  order-complete: /order/complete
   client-id: wlEvLJ3wiIIlyaHIIGJzNhnwEE3LV795
   client-secret: q9@Hdc8tnXWjLdDr915tf3GB8mDlqGEjduW@zs6LHb_suxsR~t_/7yvuJ/2:p18x
 
