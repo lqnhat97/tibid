@@ -20,7 +20,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.AllArgsConstructor;
+
 @RestController
+@AllArgsConstructor
 public class TibidController {
 
 	private final MessageProducer producer;
@@ -28,12 +31,6 @@ public class TibidController {
 	private final TibidService tibidService;
 
 	private final TikiIntegrateService tikiIntegrateService;
-
-	public TibidController(MessageProducer producer, TibidService tibidService, TikiIntegrateService tikiIntegrateService) {
-		this.producer = producer;
-		this.tibidService = tibidService;
-		this.tikiIntegrateService = tikiIntegrateService;
-	}
 
 	@GetMapping("/")
 	public String test() {

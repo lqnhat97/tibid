@@ -1,8 +1,10 @@
 package org.tibid.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class BidOrderDto extends BaseDto {
 	private long id;
 
