@@ -8,9 +8,9 @@ import lombok.Setter;
 public class BidOrderDto extends BaseDto {
 	private long id;
 
-	private int userId;
+	private long userId;
 
-	private int productId;
+	private long productId;
 
 	private String productName;
 

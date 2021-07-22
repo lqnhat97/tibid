@@ -28,5 +28,5 @@ public interface TibidService {
 
 	int updateBidOrderIpn(IpnRequest ipnRequest);
 
-	List<BidOrderEnity>  updateBidOrder(Order order, List<BidTicketDto> bidOrderDto);
+	List<BidOrderEnity> updateBidOrderFromTiki(Order order, List<BidTicketDto> bidOrderDto);
 }

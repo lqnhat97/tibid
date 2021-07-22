@@ -14,10 +14,10 @@ import javax.persistence.Table;
 public class BidTicketEntity extends BaseEntity{
 
     @Column(name = "user_id")
-    private int userId;
+    private long userId;
 
     @Column(name = "bid_order_id")
-    private int bidOrderId;
+    private long bidOrderId;
 
     @Column(name = "price")
     private float price;

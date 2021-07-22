@@ -90,10 +90,10 @@ public class TikiIntegrateServiceImpl implements TikiIntegrateService {
             for(BidTicketDto bidTicketDto : bidTicketDtoList) {
                 BidTicketEntity bidTicketEntity = bidTicketMapper.toEntity(bidTicketDto);
 
-                Optional<BidOrderEnity> bidOrderEnityOptional =bidOrderRepo.findById((long) bidTicketEntity.getBidOrderId());
+                Optional<BidOrderEnity> bidOrderEntityOptional = bidOrderRepo.findById(bidTicketEntity.getBidOrderId());
                 BidOrderEnity bidOrderEnity = new BidOrderEnity();
-                if(bidOrderEnityOptional.isPresent()){
-                    bidOrderEnity =  bidOrderEnityOptional.get();
+                if(bidOrderEntityOptional.isPresent()){
+                    bidOrderEnity =  bidOrderEntityOptional.get();
                 }
 
 
@@ -152,6 +152,8 @@ public class TikiIntegrateServiceImpl implements TikiIntegrateService {
             String timestamp = Long.toString(System.currentTimeMillis());
             String payload = timestamp + "." + clientId + "." + gson.toJson(baseRequest);
             String signature = SignatureUtils.sign(clientSecret, payload);
+            Logger.getLogger(TikiIntegrateServiceImpl.class.getName()).info("signature: "+signature);
+
             List<NameValuePair> headers = new ArrayList<>();
             headers.add(new BasicNameValuePair(HttpHeaders.CONTENT_TYPE, HEADER_CONTENT_TYPE));
             headers.add(new BasicNameValuePair(HEADER_CLIENT_ID, clientId));
@@ -176,7 +178,7 @@ public class TikiIntegrateServiceImpl implements TikiIntegrateService {
                     }
                 }
             }
-            return baseResponse.getData().getAccessToken();
+            return baseResponse.getData().getCustomer().getId();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
