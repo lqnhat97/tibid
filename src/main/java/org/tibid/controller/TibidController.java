@@ -102,7 +102,7 @@ public class TibidController {
 			return new ResponseEntity(data, HttpStatus.BAD_REQUEST);
 		}
 		Order tikiOrder = tikiIntegrateService.createOrder(bidTicketDtoList, customerId);
-		tibidService.updateBidOrder(tikiOrder, bidTicketDtoList);
+		tibidService.updateBidOrderFromTiki(tikiOrder, bidTicketDtoList);
 		return new ResponseEntity<>(tikiOrder, HttpStatus.OK);
 	}
 }

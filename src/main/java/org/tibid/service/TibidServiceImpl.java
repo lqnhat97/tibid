@@ -90,15 +90,15 @@ public class TibidServiceImpl implements TibidService {
 	}
 
 	@Override
-	public  List<BidOrderEnity>  updateBidOrder(Order order, List<BidTicketDto> bidTicketDtoList){
+	public  List<BidOrderEnity> updateBidOrderFromTiki(Order order, List<BidTicketDto> bidTicketDtoList){
 	    List<BidOrderEnity> result = new ArrayList<>();
 		for(BidTicketDto bidTicketDto : bidTicketDtoList) {
 			BidTicketEntity bidTicketEntity = bidTicketMapper.toEntity(bidTicketDto);
 
-			Optional<BidOrderEnity> bidOrderEnityOptional =bidOrderRepo.findById((long) bidTicketEntity.getBidOrderId());
+			Optional<BidOrderEnity> bidOrderEntityOptional =bidOrderRepo.findById((bidTicketEntity.getBidOrderId()));
 			BidOrderEnity bidOrderEnity = new BidOrderEnity();
-			if(bidOrderEnityOptional.isPresent()){
-				bidOrderEnity =  bidOrderEnityOptional.get();
+			if(bidOrderEntityOptional.isPresent()){
+				bidOrderEnity =  bidOrderEntityOptional.get();
 			}
             bidOrderEnity.setTikiOrderId(order.getId());
 			bidOrderEnity.setTikiOrderInfo(gson.toJson(order));
