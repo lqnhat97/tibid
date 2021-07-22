@@ -176,7 +176,7 @@ public class TikiIntegrateServiceImpl implements TikiIntegrateService {
                     }
                 }
             }
-            return baseResponse.getData().getAccessToken();
+            return baseResponse.getData().getCustomer().getId();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
