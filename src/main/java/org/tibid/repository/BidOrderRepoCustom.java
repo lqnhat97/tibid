@@ -7,4 +7,6 @@ import org.tibid.filter.OrdersSearchCriteria;
 
 public interface BidOrderRepoCustom {
 	Page<BidOrderEnity> search(BaseSearchCriteria<OrdersSearchCriteria> searchCriteria);
+
+	int updateOrderStatus();
 }

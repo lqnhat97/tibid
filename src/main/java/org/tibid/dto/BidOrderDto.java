@@ -1,12 +1,17 @@
 package org.tibid.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BidOrderDto extends BaseDto {
-	private long id;
 
 	private long userId;
 
@@ -37,4 +42,6 @@ public class BidOrderDto extends BaseDto {
 	private String tikiOrderInfo;
 
 	private String tikiOrderId;
+
+	private long lastTicketId;
 }
