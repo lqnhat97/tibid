@@ -1,5 +1,6 @@
 package org.tibid.utils;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.util.Base64Utils;
 import org.tibid.entity.BidOrderEnity;
@@ -19,14 +20,12 @@ public class SignatureUtils {
 
     public static String sign(String secretKey, String data) {
         try {
-            Logger.getLogger(SignatureUtils.class.getName()).info(data);
-            Logger.getLogger(SignatureUtils.class.getName()).info(secretKey);
             Mac hmacSHA256 = Mac.getInstance("HmacSHA256");
-            SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), "HmacSHA256");
             hmacSHA256.init(secretKeySpec);
-            byte[] encodedData = Base64Utils.encode(data.getBytes(StandardCharsets.UTF_8));
-
-            return Hex.encodeHexString(hmacSHA256.doFinal(encodedData));
+            String encodedData = Base64.encodeBase64URLSafeString(data.getBytes());
+            byte[] h =  hmacSHA256.doFinal(encodedData.getBytes());
+            return Hex.encodeHexString(h);
 
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             e.printStackTrace();

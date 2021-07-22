@@ -152,6 +152,8 @@ public class TikiIntegrateServiceImpl implements TikiIntegrateService {
             String timestamp = Long.toString(System.currentTimeMillis());
             String payload = timestamp + "." + clientId + "." + gson.toJson(baseRequest);
             String signature = SignatureUtils.sign(clientSecret, payload);
+            Logger.getLogger(TikiIntegrateServiceImpl.class.getName()).info("signature: "+signature);
+
             List<NameValuePair> headers = new ArrayList<>();
             headers.add(new BasicNameValuePair(HttpHeaders.CONTENT_TYPE, HEADER_CONTENT_TYPE));
             headers.add(new BasicNameValuePair(HEADER_CLIENT_ID, clientId));

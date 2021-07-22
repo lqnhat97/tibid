@@ -13,10 +13,10 @@ import lombok.Setter;
 @Table(name = "bid_order")
 public class BidOrderEnity extends BaseEntity{
     @Column(name = "user_id")
-    private int userId;
+    private long userId;
 
     @Column(name = "product_id")
-    private int productId;
+    private long productId;
 
     @Column(name = "product_name")
     private String productName;
