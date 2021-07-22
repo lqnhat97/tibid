@@ -17,7 +17,10 @@ import org.tibid.service.tiki.TikiIntegrateService;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+
 @RestController
+@AllArgsConstructor
 public class TibidController {
 
 	private final MessageProducer producer;
@@ -25,12 +28,6 @@ public class TibidController {
 	private final TibidService tibidService;
 
 	private final TikiIntegrateService tikiIntegrateService;
-
-	public TibidController(MessageProducer producer, TibidService tibidService, TikiIntegrateService tikiIntegrateService) {
-		this.producer = producer;
-		this.tibidService = tibidService;
-		this.tikiIntegrateService = tikiIntegrateService;
-	}
 
 	@GetMapping("/")
 	public String test() {
