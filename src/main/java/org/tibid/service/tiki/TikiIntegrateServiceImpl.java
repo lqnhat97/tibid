@@ -54,7 +54,7 @@ public class TikiIntegrateServiceImpl implements TikiIntegrateService {
     @Value(value = "${tiki.client-secret}")
     private String clientSecret;
 
-    @Value(value = "${order-complete}")
+    @Value(value = "${tiki.order-complete}")
     private String orderCompletePath;
 
     public static final String HEADER_CONTENT_TYPE = "application/json";
