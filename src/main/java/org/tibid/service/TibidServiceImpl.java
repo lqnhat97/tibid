@@ -21,8 +21,11 @@ import org.tibid.mapper.BidTicketMapper;
 import org.tibid.repository.BidOrderRepo;
 import org.tibid.repository.BidTicketRepo;
 
+import lombok.AllArgsConstructor;
+
 @Service
 @Transactional
+@AllArgsConstructor
 public class TibidServiceImpl implements TibidService {
 
 	private final BidTicketRepo bidTicketRepo;
@@ -34,14 +37,6 @@ public class TibidServiceImpl implements TibidService {
 	private final BidOrderMapper bidOrderMapper;
 
 	private final Gson gson=new Gson();
-
-	public TibidServiceImpl(BidTicketRepo bidTicketRepo, BidOrderRepo bidOrderRepo, BidTicketMapper bidTicketMapper, BidOrderMapper bidOrderMapper) {
-		this.bidTicketRepo = bidTicketRepo;
-		this.bidOrderRepo = bidOrderRepo;
-		this.bidTicketMapper = bidTicketMapper;
-		this.bidOrderMapper = bidOrderMapper;
-	}
-
 
 	@Override
 	public BidTicketDto createBidTicket(BidTicketDto bidTicketDto) {
