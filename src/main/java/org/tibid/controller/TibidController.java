@@ -3,11 +3,15 @@ package org.tibid.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
+import com.google.gson.Gson;
 import org.h2.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +25,7 @@ import org.tibid.dto.BidOrderDetailDto;
 import org.tibid.dto.BidOrderDto;
 import org.tibid.dto.BidTicketLastDetailDto;
 import org.tibid.dto.BidTicketDto;
+import org.tibid.entity.BidOrderEntity;
 import org.tibid.entity.tiki.Order;
 import org.tibid.entity.tiki.ipn.request.IpnRequest;
 import org.tibid.entity.tiki.request.TikiOrderRequest;
@@ -30,6 +35,7 @@ import org.tibid.service.TibidService;
 import org.tibid.service.tiki.TikiIntegrateService;
 
 import lombok.AllArgsConstructor;
+//import org.tibid.socket.MyStompSessionHandler;
 
 @RestController
 @AllArgsConstructor
@@ -38,6 +44,8 @@ public class TibidController {
 	private final TibidService tibidService;
 
 	private final TikiIntegrateService tikiIntegrateService;
+
+	private final SimpMessageSendingOperations messagingTemplate;
 
 	@GetMapping("/")
 	public String test() {
@@ -61,7 +69,11 @@ public class TibidController {
 
 	@PostMapping("/orders")
 	public ResponseEntity<BidOrderDto> createOrder(@RequestBody BidOrderDto bidOrderDto) {
-		return new ResponseEntity<>(tibidService.createBidOrder(bidOrderDto), HttpStatus.CREATED);
+		BidOrderDto bidOrderDtoResult = tibidService.createBidOrder(bidOrderDto);
+		HashMap<String, Object> payload = new HashMap<>();
+		payload.put("bidOrderDtoResult",bidOrderDtoResult);
+		sendToTopicOrder(Long.toString(bidOrderDtoResult.getId()), payload);
+		return new ResponseEntity<>(bidOrderDtoResult, HttpStatus.CREATED);
 
 	}
 
@@ -114,11 +126,25 @@ public class TibidController {
 
 	@PostMapping("/orders/{id}/bid")
 	public void bid(@PathVariable long id, @RequestBody BidInfoDto bidInfoDto) {
-		tibidService.bid(id, bidInfoDto);
+		BidOrderEntity bidOrderEntity = tibidService.bid(id, bidInfoDto);
+		HashMap<String,Object> payload = new HashMap<>();
+		payload.put("bidInfoDto",bidInfoDto);
+		payload.put("bidOrderEntity", bidOrderEntity);
+		Logger.getLogger(this.getClass().getName()).info("send payload " + new Gson().toJson(payload));
+		sendToTopicOrder(Long.toString(id), payload);
 	}
 
 	@PostMapping("/orders/{id}/bidWin")
 	public void bidWin(@PathVariable long id, @RequestBody BidInfoDto bidInfoDto) {
-		tibidService.bidWin(id, bidInfoDto);
+		BidOrderEntity bidOrderEntity = tibidService.bidWin(id, bidInfoDto);
+		HashMap<String,Object> payload = new HashMap<>();
+		payload.put("bidInfoDto",bidInfoDto);
+		payload.put("bidOrderEntity", bidOrderEntity);
+		sendToTopicOrder(Long.toString(id), payload);
+	}
+
+	private void sendToTopicOrder(String id, HashMap<String, Object> payload) {
+		Logger.getLogger(this.getClass().getName()).info("send payload " + new Gson().toJson(payload));
+		messagingTemplate.convertAndSend("/topic/order/" + id, payload);
 	}
 }

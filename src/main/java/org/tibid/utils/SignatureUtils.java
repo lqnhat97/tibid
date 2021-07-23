@@ -2,16 +2,11 @@ package org.tibid.utils;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
-import org.springframework.util.Base64Utils;
-import org.tibid.entity.BidOrderEnity;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Logger;
 
 public class SignatureUtils {
 

@@ -10,7 +10,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.tibid.dto.BidTicketDto;
-import org.tibid.entity.BidOrderEnity;
+import org.tibid.entity.BidOrderEntity;
 import org.tibid.entity.BidTicketEntity;
 import org.tibid.entity.tiki.Item;
 import org.tibid.entity.tiki.Order;
@@ -92,17 +92,17 @@ public class TikiIntegrateServiceImpl implements TikiIntegrateService {
             for (BidTicketDto bidTicketDto : bidTicketDtoList) {
                 BidTicketEntity bidTicketEntity = bidTicketMapper.toEntity(bidTicketDto);
 
-                Optional<BidOrderEnity> bidOrderEntityOptional = bidOrderRepo.findById(bidTicketEntity.getBidOrderId());
-                BidOrderEnity bidOrderEnity = new BidOrderEnity();
+                Optional<BidOrderEntity> bidOrderEntityOptional = bidOrderRepo.findById(bidTicketEntity.getBidOrderId());
+                BidOrderEntity bidOrderEntity = new BidOrderEntity();
                 if (bidOrderEntityOptional.isPresent()) {
-                    bidOrderEnity = bidOrderEntityOptional.get();
+                    bidOrderEntity = bidOrderEntityOptional.get();
                 }
 
 
                 Item item = new Item();
-                item.setName(bidOrderEnity.getProductName());
-                item.setSku(String.valueOf(bidOrderEnity.getProductId()));
-                item.setQuantity(bidOrderEnity.getBidQuantity());
+                item.setName(bidOrderEntity.getProductName());
+                item.setSku(String.valueOf(bidOrderEntity.getProductId()));
+                item.setQuantity(bidOrderEntity.getBidQuantity());
                 item.setPrice((int) bidTicketEntity.getPrice());
                 itemList.add(item);
             }

@@ -15,9 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
-import org.tibid.entity.BidOrderEnity;
-import org.tibid.entity.QBidOrderEnity;
-import org.tibid.entity.QBidTicketEntity;
+import org.tibid.entity.BidOrderEntity;
+import org.tibid.entity.QBidOrderEntity;
 import org.tibid.filter.BaseSearchCriteria;
 import org.tibid.filter.OrdersSearchCriteria;
 import org.tibid.repository.BidOrderRepoCustom;
@@ -29,24 +28,26 @@ public class BidOrderRepoCustomImpl implements BidOrderRepoCustom {
 	private EntityManager em;
 
 	@Override
-	public Page<BidOrderEnity> search(BaseSearchCriteria<OrdersSearchCriteria> searchCriteria) {
-		QBidOrderEnity qBidOrderEnity = QBidOrderEnity.bidOrderEnity;
+	public Page<BidOrderEntity> search(BaseSearchCriteria<OrdersSearchCriteria> searchCriteria) {
+		QBidOrderEntity qBidOrderEntity = QBidOrderEntity.bidOrderEntity;
 
 		BooleanBuilder builder = new BooleanBuilder();
 		if (!StringUtils.isEmpty(searchCriteria.getSearchCriteria().getProductName())) {
-			builder.and(qBidOrderEnity.productName.contains(searchCriteria.getSearchCriteria().getProductName()));
+			builder.and(qBidOrderEntity.productName.contains(searchCriteria.getSearchCriteria().getProductName()));
 		}
+		builder.and(qBidOrderEntity.status.eq(searchCriteria.getSearchCriteria().getOrderStatus()));
+		builder.and(qBidOrderEntity.userId.eq(searchCriteria.getSearchCriteria().getSellerId()));
 
 		Pageable pageable = SearchHelper.getPageableObj(searchCriteria);
 
-		JPAQuery<BidOrderEnity> query = new JPAQuery<>(em);
-		query.from(qBidOrderEnity)
+		JPAQuery<BidOrderEntity> query = new JPAQuery<>(em);
+		query.from(qBidOrderEntity)
 				.where(builder)
 				.limit(pageable.getPageSize())
 				.offset(pageable.getOffset());
 
 		long total = query.fetchCount();
-		List<BidOrderEnity> testCases = query.fetch();
+		List<BidOrderEntity> testCases = query.fetch();
 
 		return new PageImpl<>(testCases, pageable, total);
 	}
