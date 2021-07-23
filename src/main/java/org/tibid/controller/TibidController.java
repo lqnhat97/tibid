@@ -115,4 +115,9 @@ public class TibidController {
 	public void bid(@PathVariable long id, @RequestBody BidInfoDto bidInfoDto) {
 		tibidService.bid(id, bidInfoDto);
 	}
+
+	@PostMapping("/orders/{id}/bidWin")
+	public void bidWin(@PathVariable long id, @RequestBody BidInfoDto bidInfoDto) {
+		tibidService.bidWin(id, bidInfoDto);
+	}
 }
