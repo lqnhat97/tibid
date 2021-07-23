@@ -33,13 +33,42 @@
 			"response": []
 		},
 		{
+			"name": "Bid",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"10\",\r\n    \"price\": \"1100\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/orders/1/bid",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"1",
+						"bid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Add ticket",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userId\": \"1\",\r\n    \"bidOrderId\": \"1\",\r\n    \"price\": \"100000\",\r\n    \"status\":\"10\"\r\n}",
+					"raw": "{\r\n    \"userId\": \"1\",\r\n    \"bidOrderId\": \"2\",\r\n    \"price\": \"100000\",\r\n    \"status\":\"1\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -74,9 +103,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/orders/search",
+					"raw": "https://118.69.244.57:8080/orders/search",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"118",
+						"69",
+						"244",
+						"57"
 					],
 					"port": "8080",
 					"path": [
@@ -109,7 +142,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://api.tiki.vn/seller-store/v2/collections/6/products?seller_id=18252&cursor=0&limit=20&delivery_zone=",
+					"raw": "https://api.tiki.vn/seller-store/v2/collections/6/products?seller_id=18252&cursor=0&limit=20",
 					"protocol": "https",
 					"host": [
 						"api",
@@ -135,10 +168,6 @@
 						{
 							"key": "limit",
 							"value": "20"
-						},
-						{
-							"key": "delivery_zone",
-							"value": ""
 						}
 					]
 				}
@@ -197,6 +226,35 @@
 					"path": [
 						"orders",
 						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get ticket order detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/tickets/search?userId=1&status=1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tickets",
+						"search"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "1"
+						},
+						{
+							"key": "status",
+							"value": "1"
+						}
 					]
 				}
 			},
