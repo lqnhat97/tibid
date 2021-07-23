@@ -5,7 +5,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         hbm2ddl:
-          auto: create
+          auto: none
         cache:
           use_second_level_cache: true
           use_query_cache: true
