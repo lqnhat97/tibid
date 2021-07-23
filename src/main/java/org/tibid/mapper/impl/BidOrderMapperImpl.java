@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 import org.tibid.dto.BidOrderDto;
-import org.tibid.entity.BidOrderEnity;
+import org.tibid.entity.BidOrderEntity;
 import org.tibid.mapper.BidOrderMapper;
 
 @Component
 public class BidOrderMapperImpl implements BidOrderMapper {
 	@Override
-	public BidOrderDto toDto(BidOrderEnity entity) {
+	public BidOrderDto toDto(BidOrderEntity entity) {
 		BidOrderDto dto = new BidOrderDto();
 		dto.setId(entity.getId());
 		dto.setUserId(entity.getUserId());
@@ -49,8 +49,8 @@ public class BidOrderMapperImpl implements BidOrderMapper {
 	}
 
 	@Override
-	public BidOrderEnity toEntity(BidOrderDto dto) {
-		BidOrderEnity entity = new BidOrderEnity();
+	public BidOrderEntity toEntity(BidOrderDto dto) {
+		BidOrderEntity entity = new BidOrderEntity();
 		if (0 != dto.getUserId()) {
 			entity.setUserId(dto.getUserId());
 		}
@@ -87,9 +87,9 @@ public class BidOrderMapperImpl implements BidOrderMapper {
 	}
 
 	@Override
-	public List<BidOrderDto> toDtoList(List<BidOrderEnity> enityList) {
+	public List<BidOrderDto> toDtoList(List<BidOrderEntity> entityList) {
 		List<BidOrderDto> result = new ArrayList<>();
-		enityList.forEach(entity -> {
+		entityList.forEach(entity -> {
 			result.add(toDto(entity));
 		});
 		return result;

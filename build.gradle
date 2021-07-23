@@ -32,6 +32,7 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpcore'
     implementation 'commons-codec:commons-codec'
     implementation 'org.apache.commons:commons-pool2:2.4.2'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     annotationProcessor 'com.querydsl:querydsl-apt::jpa',
             'com.querydsl:querydsl-apt',

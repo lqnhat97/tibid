@@ -3,8 +3,9 @@ package org.tibid.mapper;
 import java.util.List;
 
 import org.tibid.dto.BidOrderDto;
-import org.tibid.entity.BidOrderEnity;
+import org.tibid.entity.BidOrderEntity;
 
-public interface BidOrderMapper extends BaseMapper<BidOrderDto, BidOrderEnity> {
-	List<BidOrderDto> toDtoList(List<BidOrderEnity> enityList);
+public interface BidOrderMapper extends BaseMapper<BidOrderDto, BidOrderEntity> {
+	List<BidOrderDto> toDtoList(List<BidOrderEntity> entityList);
+
 }
