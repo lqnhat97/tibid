@@ -1,28 +1,33 @@
 package org.tibid.service;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.google.gson.Gson;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tibid.dto.BidInfoDto;
 import org.tibid.dto.BidOrderDto;
+import org.tibid.dto.BidTicketDetailDto;
 import org.tibid.dto.BidTicketDto;
 import org.tibid.entity.BidOrderEnity;
 import org.tibid.entity.BidTicketEntity;
 import org.tibid.entity.tiki.Order;
+import org.tibid.entity.tiki.ipn.request.IpnRequest;
 import org.tibid.filter.BaseSearchCriteria;
 import org.tibid.filter.OrdersSearchCriteria;
-import org.tibid.entity.tiki.ipn.request.IpnRequest;
 import org.tibid.mapper.BidOrderMapper;
 import org.tibid.mapper.BidTicketMapper;
 import org.tibid.repository.BidOrderRepo;
 import org.tibid.repository.BidTicketRepo;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
@@ -36,7 +41,7 @@ public class TibidServiceImpl implements TibidService {
 
 	private final BidOrderMapper bidOrderMapper;
 
-	private final Gson gson=new Gson();
+	private final Gson gson = new Gson();
 
 	@Override
 	public BidTicketDto createBidTicket(BidTicketDto bidTicketDto) {
@@ -53,6 +58,7 @@ public class TibidServiceImpl implements TibidService {
 	// Temporary find all
 	@Override
 	public Page<BidOrderDto> searchBidOrder(BaseSearchCriteria<OrdersSearchCriteria> searchCriteria) {
+		this.updateAllOrdersStatus();
 		Page<BidOrderEnity> pageResult = bidOrderRepo.search(searchCriteria);
 		return pageResult.map(entity -> bidOrderMapper.toDto(entity));
 	}
@@ -79,7 +85,7 @@ public class TibidServiceImpl implements TibidService {
 
 	// Temporary find all
 	@Override
-	public int updateBidOrderIpn(IpnRequest ipnRequest){
+	public int updateBidOrderIpn(IpnRequest ipnRequest) {
 
 		BidOrderEnity bidOrderEnity = bidOrderRepo.findByTikiOrderId(ipnRequest.getOrder().getId());
 		//Update the id
@@ -90,21 +96,55 @@ public class TibidServiceImpl implements TibidService {
 	}
 
 	@Override
-	public  List<BidOrderEnity> updateBidOrderFromTiki(Order order, List<BidTicketDto> bidTicketDtoList){
-	    List<BidOrderEnity> result = new ArrayList<>();
-		for(BidTicketDto bidTicketDto : bidTicketDtoList) {
+	public List<BidOrderEnity> updateBidOrderFromTiki(Order order, List<BidTicketDto> bidTicketDtoList) {
+		List<BidOrderEnity> result = new ArrayList<>();
+		for (BidTicketDto bidTicketDto : bidTicketDtoList) {
 			BidTicketEntity bidTicketEntity = bidTicketMapper.toEntity(bidTicketDto);
 
-			Optional<BidOrderEnity> bidOrderEntityOptional =bidOrderRepo.findById((bidTicketEntity.getBidOrderId()));
+			Optional<BidOrderEnity> bidOrderEntityOptional = bidOrderRepo.findById((bidTicketEntity.getBidOrderId()));
 			BidOrderEnity bidOrderEnity = new BidOrderEnity();
-			if(bidOrderEntityOptional.isPresent()){
-				bidOrderEnity =  bidOrderEntityOptional.get();
+			if (bidOrderEntityOptional.isPresent()) {
+				bidOrderEnity = bidOrderEntityOptional.get();
 			}
-            bidOrderEnity.setTikiOrderId(order.getId());
+			bidOrderEnity.setTikiOrderId(order.getId());
 			bidOrderEnity.setTikiOrderInfo(gson.toJson(order));
-            result.add( bidOrderRepo.save(bidOrderEnity));
+			result.add(bidOrderRepo.save(bidOrderEnity));
 		}
 		return result;
 
+	}
+
+	private void updateAllOrdersStatus() {
+		int updatedRow = bidOrderRepo.updateOrderStatus();
+		log.info("Updated: {} rows", updatedRow);
+	}
+
+	@Override
+	public List<BidTicketDetailDto> getTicketDetailByUserId(long userId, int status) {
+		List<BidTicketDetailDto> result = new ArrayList<>();
+		bidOrderRepo.findByUserBidingIdAndStatus(userId, status).forEach(bidOrderEnity -> {
+			result.add(BidTicketDetailDto.builder()
+					.orderDto(bidOrderMapper.toDto(bidOrderEnity))
+					.ticketDto(this.getLastestTicketOfUser(userId, bidOrderEnity.getId(), status))
+					.build());
+		});
+		return result;
+	}
+
+	@Override
+	public void bid(long orderId, BidInfoDto bidInfoDto) {
+		BidTicketEntity bidTicketEntity = bidTicketRepo.save(bidTicketMapper.toEntity(BidTicketDto.builder()
+				.bidOrderId(orderId)
+				.price(bidInfoDto.getPrice())
+				.userId(bidInfoDto.getUserId())
+				.build()));
+
+		BidOrderEnity bidOrderEnity = bidOrderRepo.findById(bidTicketEntity.getBidOrderId()).get();
+		bidOrderEnity.setLastTicketId(bidTicketEntity.getId());
+		bidOrderRepo.save(bidOrderEnity);
+	}
+
+	private BidTicketDto getLastestTicketOfUser(long userid, long orderId, int status) {
+		return bidTicketMapper.toDto(bidTicketRepo.findLastRecordBy(userid, orderId, status));
 	}
 }
