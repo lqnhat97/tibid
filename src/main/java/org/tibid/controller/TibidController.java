@@ -45,8 +45,7 @@ public class TibidController {
 
 	private final TikiIntegrateService tikiIntegrateService;
 
-	@Autowired
-	private SimpMessageSendingOperations messagingTemplate;
+	private final SimpMessageSendingOperations messagingTemplate;
 
 	@GetMapping("/")
 	public String test() {
@@ -70,7 +69,11 @@ public class TibidController {
 
 	@PostMapping("/orders")
 	public ResponseEntity<BidOrderDto> createOrder(@RequestBody BidOrderDto bidOrderDto) {
-		return new ResponseEntity<>(tibidService.createBidOrder(bidOrderDto), HttpStatus.CREATED);
+		BidOrderDto bidOrderDtoResult = tibidService.createBidOrder(bidOrderDto);
+		HashMap<String, Object> payload = new HashMap<>();
+		payload.put("bidOrderDtoResult",bidOrderDtoResult);
+		sendToTopicOrder(Long.toString(bidOrderDtoResult.getId()), payload);
+		return new ResponseEntity<>(bidOrderDtoResult, HttpStatus.CREATED);
 
 	}
 
@@ -128,7 +131,7 @@ public class TibidController {
 		payload.put("bidInfoDto",bidInfoDto);
 		payload.put("bidOrderEntity", bidOrderEntity);
 		Logger.getLogger(this.getClass().getName()).info("send payload " + new Gson().toJson(payload));
-		sendToTopicOrder(bidOrderEntity, payload);
+		sendToTopicOrder(Long.toString(id), payload);
 	}
 
 	@PostMapping("/orders/{id}/bidWin")
@@ -137,10 +140,11 @@ public class TibidController {
 		HashMap<String,Object> payload = new HashMap<>();
 		payload.put("bidInfoDto",bidInfoDto);
 		payload.put("bidOrderEntity", bidOrderEntity);
-		sendToTopicOrder(bidOrderEntity, payload);
+		sendToTopicOrder(Long.toString(id), payload);
 	}
 
-	private void sendToTopicOrder(BidOrderEntity bidOrderEntity, HashMap<String, Object> payload) {
-		messagingTemplate.convertAndSend("/topic/order/" + bidOrderEntity.getId(), payload);
+	private void sendToTopicOrder(String id, HashMap<String, Object> payload) {
+		Logger.getLogger(this.getClass().getName()).info("send payload " + new Gson().toJson(payload));
+		messagingTemplate.convertAndSend("/topic/order/" + id, payload);
 	}
 }
