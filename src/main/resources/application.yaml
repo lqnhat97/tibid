@@ -5,26 +5,12 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MariaDB103Dialect
         hbm2ddl:
-          auto: create-drop
+          auto: create
         cache:
           use_second_level_cache: true
           use_query_cache: true
           region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
     show_sql: true
-  kafka:
-    bootstrap-servers: localhost:9093
-    consumer:
-      bootstrapAddress: localhost:9093
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    producer:
-      bootstrapAddress: localhost:9093
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    topic:
-      name:
-        bidorder: bid_order_status
-        bidticket: bid_ticket_status
   datasource:
     url: jdbc:mariadb://localhost:9083/tibid
     driver-class-name: org.mariadb.jdbc.Driver
