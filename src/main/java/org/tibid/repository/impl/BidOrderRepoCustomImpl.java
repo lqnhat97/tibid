@@ -35,6 +35,8 @@ public class BidOrderRepoCustomImpl implements BidOrderRepoCustom {
 		if (!StringUtils.isEmpty(searchCriteria.getSearchCriteria().getProductName())) {
 			builder.and(qBidOrderEntity.productName.contains(searchCriteria.getSearchCriteria().getProductName()));
 		}
+		builder.and(qBidOrderEntity.status.eq(searchCriteria.getSearchCriteria().getOrderStatus()));
+		builder.and(qBidOrderEntity.userId.eq(searchCriteria.getSearchCriteria().getSellerId()));
 
 		Pageable pageable = SearchHelper.getPageableObj(searchCriteria);
 
