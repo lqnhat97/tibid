@@ -23,5 +23,7 @@ public class BidTicketDto extends BaseDto {
 
 	private long createdAt;
 
-	private long modifiedAt;
+	private String userName;
+
+	private String userAvatar;
 }

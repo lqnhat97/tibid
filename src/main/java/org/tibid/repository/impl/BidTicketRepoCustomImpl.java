@@ -31,7 +31,7 @@ public class BidTicketRepoCustomImpl implements BidTicketRepoCustom {
 	}
 
 	@Override
-	public int updateTicketStatus(long orderId) {
+	public int updateTicketStatusToFail(long orderId) {
 		Query query = em.createNativeQuery("update bid_ticket set status = 3 where bid_order_id = :orderId");
 		query.setParameter("orderId", orderId);
 		return query.executeUpdate();
