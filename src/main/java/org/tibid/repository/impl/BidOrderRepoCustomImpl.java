@@ -61,7 +61,7 @@ public class BidOrderRepoCustomImpl implements BidOrderRepoCustom {
 
 		this.em.flush();
 
-		query = em.createNativeQuery("update bid_order set status = 3 where :timeNow >= bid_end_time");
+		query = em.createNativeQuery("update bid_order set status = 3 where status = 2 and :timeNow >= bid_end_time");
 		query.setParameter("timeNow", timeNow);
 		updatedRows += query.executeUpdate();
 
