@@ -137,6 +137,8 @@ public class TibidServiceImpl implements TibidService {
 				.bidOrderId(orderId)
 				.price(bidInfoDto.getPrice())
 				.userId(bidInfoDto.getUserId())
+				.userAvatar(bidInfoDto.getUserAvatar())
+				.userName(bidInfoDto.getUserName())
 				.status(1)
 				.build()));
 
@@ -147,14 +149,16 @@ public class TibidServiceImpl implements TibidService {
 
 	@Override
 	public void bidWin(long orderId, BidInfoDto bidInfoDto) {
-		int updatedRow = bidTicketRepo.updateTicketStatus(3);
+		int updatedRow = bidTicketRepo.updateTicketStatusToFail(orderId);
 		log.info("Updated: {} rows to fail because this bid has ended", updatedRow);
 
 		BidTicketEntity bidTicketEntity = bidTicketRepo.save(bidTicketMapper.toEntity(BidTicketDto.builder()
 				.bidOrderId(orderId)
 				.price(bidInfoDto.getPrice())
 				.userId(bidInfoDto.getUserId())
-				.status(3)
+				.userAvatar(bidInfoDto.getUserAvatar())
+				.userName(bidInfoDto.getUserName())
+				.status(2)
 				.build()));
 
 		BidOrderEnity bidOrderEnity = bidOrderRepo.findById(bidTicketEntity.getBidOrderId()).get();

@@ -42,10 +42,10 @@ public class BidOrderEnity extends BaseEntity {
 	@Column(name = "bid_quantity")
 	private int bidQuantity;
 
-	@Column(name = "tiki_info")
+	@Column(name = "tiki_info", columnDefinition = "TEXT")
 	private String tikiInfo;
 
-	@Column(name = "tiki_order_info")
+	@Column(name = "tiki_order_info", columnDefinition = "TEXT")
 	private String tikiOrderInfo;
 
 	@Column(name = "tiki_order_id")
