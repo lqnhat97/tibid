@@ -11,12 +11,12 @@ public class SocketLauncher {
     private static String hostName;
 
     @Value("${socket.port}")
-    private static int port;
+    private static String port;
 
     public static void start() {
         Configuration config = new Configuration();
         config.setHostname(hostName);
-        config.setPort(port);
+        config.setPort(Integer.parseInt(port));
 
         final SocketIOServer server = new SocketIOServer(config);
         server.addEventListener("ticket_event", BidOrderDto.class, (client, data, ackRequest) -> {
