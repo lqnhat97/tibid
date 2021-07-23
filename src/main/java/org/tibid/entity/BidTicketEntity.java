@@ -25,4 +25,9 @@ public class BidTicketEntity extends BaseEntity{
     @Column(name = "status")
     private int status;
 
+    @Column(name = "user_name")
+    private String userName;
+
+    @Column(name = "user_avatar")
+    private String userAvatar;
 }

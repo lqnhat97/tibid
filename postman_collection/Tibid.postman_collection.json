@@ -20,11 +20,10 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/orders",
+					"raw": "{{local}}/orders",
 					"host": [
-						"localhost"
+						"{{local}}"
 					],
-					"port": "8080",
 					"path": [
 						"orders"
 					]
@@ -103,15 +102,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://118.69.244.57:8080/orders/search",
-					"protocol": "https",
+					"raw": "{{cloud-base}}/orders/search",
 					"host": [
-						"118",
-						"69",
-						"244",
-						"57"
+						"{{cloud-base}}"
 					],
-					"port": "8080",
 					"path": [
 						"orders",
 						"search"
@@ -237,11 +231,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/tickets/search?userId=1&status=1",
+					"raw": "{{cloud-base}}/tickets/search?userId=1&status=1",
 					"host": [
-						"localhost"
+						"{{cloud-base}}"
 					],
-					"port": "8080",
 					"path": [
 						"tickets",
 						"search"
@@ -259,6 +252,64 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "BuyNow",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"10\",\r\n    \"price\": \"1100\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/orders/1/bidWin",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"orders",
+						"1",
+						"bidWin"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "cloud-base",
+			"value": "https://tibid-22bzhkbi5a-as.a.run.app"
+		},
+		{
+			"key": "local",
+			"value": "localhost:8080"
 		}
 	]
 }
