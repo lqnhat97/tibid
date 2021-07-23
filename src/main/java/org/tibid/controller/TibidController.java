@@ -24,7 +24,7 @@ import org.tibid.dto.BidInfoDto;
 import org.tibid.dto.BidOrderDto;
 import org.tibid.dto.BidTicketDetailDto;
 import org.tibid.dto.BidTicketDto;
-import org.tibid.entity.BidOrderEnity;
+import org.tibid.entity.BidOrderEntity;
 import org.tibid.entity.tiki.Order;
 import org.tibid.entity.tiki.ipn.request.IpnRequest;
 import org.tibid.entity.tiki.request.TikiOrderRequest;
@@ -34,6 +34,7 @@ import org.tibid.service.TibidService;
 import org.tibid.service.tiki.TikiIntegrateService;
 
 import lombok.AllArgsConstructor;
+//import org.tibid.socket.MyStompSessionHandler;
 
 @RestController
 @AllArgsConstructor
@@ -121,20 +122,24 @@ public class TibidController {
 
 	@PostMapping("/orders/{id}/bid")
 	public void bid(@PathVariable long id, @RequestBody BidInfoDto bidInfoDto) {
-		BidOrderEnity bidOrderEnity = tibidService.bid(id, bidInfoDto);
+		BidOrderEntity bidOrderEntity = tibidService.bid(id, bidInfoDto);
 		HashMap<String,Object> payload = new HashMap<>();
 		payload.put("bidInfoDto",bidInfoDto);
-		payload.put("bidOrderEnity",bidOrderEnity);
-		Logger.getLogger(this.getClass().getName()).info("payload " + new Gson().toJson(payload));
-		messagingTemplate.convertAndSend("/topic/order/" + bidOrderEnity.getId(), payload);
+		payload.put("bidOrderEntity", bidOrderEntity);
+		Logger.getLogger(this.getClass().getName()).info("send payload " + new Gson().toJson(payload));
+		sendToTopicOrder(bidOrderEntity, payload);
 	}
 
 	@PostMapping("/orders/{id}/bidWin")
 	public void bidWin(@PathVariable long id, @RequestBody BidInfoDto bidInfoDto) {
-		BidOrderEnity bidOrderEnity = tibidService.bidWin(id, bidInfoDto);
+		BidOrderEntity bidOrderEntity = tibidService.bidWin(id, bidInfoDto);
 		HashMap<String,Object> payload = new HashMap<>();
 		payload.put("bidInfoDto",bidInfoDto);
-		payload.put("bidOrderEnity",bidOrderEnity);
-		messagingTemplate.convertAndSend("/topic/order/" + bidOrderEnity.getId(), payload);
+		payload.put("bidOrderEnity", bidOrderEntity);
+		sendToTopicOrder(bidOrderEntity, payload);
+	}
+
+	private void sendToTopicOrder(BidOrderEntity bidOrderEntity, HashMap<String, Object> payload) {
+		messagingTemplate.convertAndSend("/topic/order/" + bidOrderEntity.getId(), payload);
 	}
 }

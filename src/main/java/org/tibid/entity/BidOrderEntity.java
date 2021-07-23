@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "bid_order")
-public class BidOrderEnity extends BaseEntity {
+public class BidOrderEntity extends BaseEntity {
 	@Column(name = "user_id")
 	private long userId;
 

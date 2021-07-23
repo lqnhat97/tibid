@@ -16,5 +16,12 @@ public class TibidApplication {
      */
     public static void main(String[] args) {
         SpringApplication.run(TibidApplication.class, args);
+//        WebSocketClient client = new StandardWebSocketClient();
+//
+//        WebSocketStompClient stompClient = new WebSocketStompClient(client);
+//        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+//
+//        StompSessionHandler sessionHandler = new MyStompSessionHandler();
+//        stompClient.connect("ws://localhost:8080/ws", sessionHandler);
     }
 }

@@ -7,7 +7,7 @@ import org.tibid.dto.BidInfoDto;
 import org.tibid.dto.BidOrderDto;
 import org.tibid.dto.BidTicketDetailDto;
 import org.tibid.dto.BidTicketDto;
-import org.tibid.entity.BidOrderEnity;
+import org.tibid.entity.BidOrderEntity;
 import org.tibid.entity.tiki.Order;
 import org.tibid.entity.tiki.ipn.request.IpnRequest;
 import org.tibid.filter.BaseSearchCriteria;
@@ -30,10 +30,10 @@ public interface TibidService {
 
 	int updateBidOrderIpn(IpnRequest ipnRequest);
 
-	List<BidOrderEnity> updateBidOrderFromTiki(Order order, List<BidTicketDto> bidOrderDto);
+	List<BidOrderEntity> updateBidOrderFromTiki(Order order, List<BidTicketDto> bidOrderDto);
 
 	List<BidTicketDetailDto> getTicketDetailByUserId(long userId, int status);
 
-	BidOrderEnity bid(long orderId, BidInfoDto bidInfoDto);
-	BidOrderEnity bidWin(long orderId, BidInfoDto bidInfoDto);
+	BidOrderEntity bid(long orderId, BidInfoDto bidInfoDto);
+	BidOrderEntity bidWin(long orderId, BidInfoDto bidInfoDto);
 }
