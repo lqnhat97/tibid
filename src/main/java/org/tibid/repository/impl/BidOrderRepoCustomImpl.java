@@ -58,7 +58,7 @@ public class BidOrderRepoCustomImpl implements BidOrderRepoCustom {
 	@Override
 	public int updateOrderStatus() {
 		ZoneId zoneId = ZoneId.systemDefault();
-		long timeNow = LocalDateTime.now().atZone(zoneId).toEpochSecond();
+		long timeNow = LocalDateTime.now().atZone(zoneId).toInstant().toEpochMilli();
 		Query query = em.createNativeQuery("update bid_order set status = 2 where status = 1 and :timeNow between bid_start_time and bid_end_time");
 		query.setParameter("timeNow", timeNow);
 		int updatedRows = query.executeUpdate();
