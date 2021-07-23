@@ -127,10 +127,10 @@ public class TibidController {
 	@PostMapping("/orders/{id}/bid")
 	public BidOrderEntity bid(@PathVariable long id, @RequestBody BidInfoDto bidInfoDto) {
 		BidOrderEntity bidOrderEntity = tibidService.bid(id, bidInfoDto);
+		BidTicketDto bidTicketDto = tibidService.getTicketById(bidOrderEntity.getLastTicketId());
 		HashMap<String,Object> payload = new HashMap<>();
-		payload.put("bidInfoDto",bidInfoDto);
-		payload.put("bidOrderEntity", bidOrderEntity);
-		Logger.getLogger(this.getClass().getName()).info("send payload " + new Gson().toJson(payload));
+		payload.put("lastTicket",bidTicketDto);
+		payload.put("order", bidOrderEntity);
 		sendToTopicOrder(Long.toString(id), payload);
 		return bidOrderEntity;
 	}
@@ -138,9 +138,10 @@ public class TibidController {
 	@PostMapping("/orders/{id}/bidWin")
 	public BidOrderEntity bidWin(@PathVariable long id, @RequestBody BidInfoDto bidInfoDto) {
 		BidOrderEntity bidOrderEntity = tibidService.bidWin(id, bidInfoDto);
+		BidTicketDto bidTicketDto = tibidService.getTicketById(bidOrderEntity.getLastTicketId());
 		HashMap<String,Object> payload = new HashMap<>();
-		payload.put("bidInfoDto",bidInfoDto);
-		payload.put("bidOrderEntity", bidOrderEntity);
+		payload.put("lastTicket",bidTicketDto);
+		payload.put("order", bidOrderEntity);
 		sendToTopicOrder(Long.toString(id), payload);
 		return bidOrderEntity;
 	}
