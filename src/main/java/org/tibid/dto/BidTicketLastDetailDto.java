@@ -7,7 +7,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class BidTicketDetailDto {
+public class BidTicketLastDetailDto {
 	private BidTicketDto ticketDto;
 
 	private BidOrderDto orderDto;
