@@ -41,3 +41,7 @@ tiki:
 
 server:
   port: 8080
+
+socket:
+  hostname: localhost
+  port: 9092
