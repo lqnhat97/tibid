@@ -2,8 +2,7 @@ package org.tibid.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQuery;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,5 +34,13 @@ public class BidTicketRepoCustomImpl implements BidTicketRepoCustom {
 		Query query = em.createNativeQuery("update bid_ticket set status = 3 where bid_order_id = :orderId");
 		query.setParameter("orderId", orderId);
 		return query.executeUpdate();
+	}
+
+	@Override
+	public List<BidTicketEntity> findLimitTicketsByOrderId(long orderId, int limit) {
+		Query query = em.createNativeQuery("select * from bid_ticket t where t.bid_order_id = :orderId order by t.id desc", BidTicketEntity.class);
+		query.setParameter("orderId", orderId);
+		query.setMaxResults(limit);
+		return query.getResultList();
 	}
 }
