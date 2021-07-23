@@ -3,11 +3,15 @@ package org.tibid.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
+import com.google.gson.Gson;
 import org.h2.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +24,7 @@ import org.tibid.dto.BidInfoDto;
 import org.tibid.dto.BidOrderDto;
 import org.tibid.dto.BidTicketDetailDto;
 import org.tibid.dto.BidTicketDto;
+import org.tibid.entity.BidOrderEnity;
 import org.tibid.entity.tiki.Order;
 import org.tibid.entity.tiki.ipn.request.IpnRequest;
 import org.tibid.entity.tiki.request.TikiOrderRequest;
@@ -37,6 +42,9 @@ public class TibidController {
 	private final TibidService tibidService;
 
 	private final TikiIntegrateService tikiIntegrateService;
+
+	@Autowired
+	private SimpMessageSendingOperations messagingTemplate;
 
 	@GetMapping("/")
 	public String test() {
@@ -113,11 +121,20 @@ public class TibidController {
 
 	@PostMapping("/orders/{id}/bid")
 	public void bid(@PathVariable long id, @RequestBody BidInfoDto bidInfoDto) {
-		tibidService.bid(id, bidInfoDto);
+		BidOrderEnity bidOrderEnity = tibidService.bid(id, bidInfoDto);
+		HashMap<String,Object> payload = new HashMap<>();
+		payload.put("bidInfoDto",bidInfoDto);
+		payload.put("bidOrderEnity",bidOrderEnity);
+		Logger.getLogger(this.getClass().getName()).info("payload " + new Gson().toJson(payload));
+		messagingTemplate.convertAndSend("/topic/order/" + bidOrderEnity.getId(), payload);
 	}
 
 	@PostMapping("/orders/{id}/bidWin")
 	public void bidWin(@PathVariable long id, @RequestBody BidInfoDto bidInfoDto) {
-		tibidService.bidWin(id, bidInfoDto);
+		BidOrderEnity bidOrderEnity = tibidService.bidWin(id, bidInfoDto);
+		HashMap<String,Object> payload = new HashMap<>();
+		payload.put("bidInfoDto",bidInfoDto);
+		payload.put("bidOrderEnity",bidOrderEnity);
+		messagingTemplate.convertAndSend("/topic/order/" + bidOrderEnity.getId(), payload);
 	}
 }

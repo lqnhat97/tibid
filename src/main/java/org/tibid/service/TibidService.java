@@ -34,6 +34,6 @@ public interface TibidService {
 
 	List<BidTicketDetailDto> getTicketDetailByUserId(long userId, int status);
 
-	void bid(long orderId, BidInfoDto bidInfoDto);
-	void bidWin(long orderId, BidInfoDto bidInfoDto);
+	BidOrderEnity bid(long orderId, BidInfoDto bidInfoDto);
+	BidOrderEnity bidWin(long orderId, BidInfoDto bidInfoDto);
 }

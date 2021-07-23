@@ -132,7 +132,7 @@ public class TibidServiceImpl implements TibidService {
 	}
 
 	@Override
-	public void bid(long orderId, BidInfoDto bidInfoDto) {
+	public BidOrderEnity bid(long orderId, BidInfoDto bidInfoDto) {
 		BidTicketEntity bidTicketEntity = bidTicketRepo.save(bidTicketMapper.toEntity(BidTicketDto.builder()
 				.bidOrderId(orderId)
 				.price(bidInfoDto.getPrice())
@@ -142,11 +142,11 @@ public class TibidServiceImpl implements TibidService {
 
 		BidOrderEnity bidOrderEnity = bidOrderRepo.findById(bidTicketEntity.getBidOrderId()).get();
 		bidOrderEnity.setLastTicketId(bidTicketEntity.getId());
-		bidOrderRepo.save(bidOrderEnity);
+		return bidOrderRepo.save(bidOrderEnity);
 	}
 
 	@Override
-	public void bidWin(long orderId, BidInfoDto bidInfoDto) {
+	public BidOrderEnity bidWin(long orderId, BidInfoDto bidInfoDto) {
 		int updatedRow = bidTicketRepo.updateTicketStatus(3);
 		log.info("Updated: {} rows to fail because this bid has ended", updatedRow);
 
@@ -160,7 +160,7 @@ public class TibidServiceImpl implements TibidService {
 		BidOrderEnity bidOrderEnity = bidOrderRepo.findById(bidTicketEntity.getBidOrderId()).get();
 		bidOrderEnity.setLastTicketId(bidTicketEntity.getId());
 		bidOrderEnity.setStatus(3);
-		bidOrderRepo.save(bidOrderEnity);
+		return bidOrderRepo.save(bidOrderEnity);
 	}
 
 	private BidTicketDto getLastestTicketOfUser(long userid, long orderId, int status) {
