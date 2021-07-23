@@ -25,7 +25,6 @@ import org.tibid.entity.tiki.ipn.request.IpnRequest;
 import org.tibid.entity.tiki.request.TikiOrderRequest;
 import org.tibid.filter.BaseSearchCriteria;
 import org.tibid.filter.OrdersSearchCriteria;
-import org.tibid.kafka.MessageProducer;
 import org.tibid.service.TibidService;
 import org.tibid.service.tiki.TikiIntegrateService;
 
@@ -34,8 +33,6 @@ import lombok.AllArgsConstructor;
 @RestController
 @AllArgsConstructor
 public class TibidController {
-
-	private final MessageProducer producer;
 
 	private final TibidService tibidService;
 
@@ -80,18 +77,6 @@ public class TibidController {
 	@DeleteMapping("/orders/{id}")
 	public void deleteOrderById(@PathVariable long id) {
 		tibidService.deleteOrderById(id);
-	}
-
-	@GetMapping("/kafka1")
-	public String kafkaTest1() {
-		producer.sendMessageBidOrderStatus("test message");
-		return "Sent!";
-	}
-
-	@GetMapping("/kafka2")
-	public String kafkaTest2() {
-		producer.sendMessageBidTicketStatus("test message");
-		return "Sent!";
 	}
 
 	@PostMapping("/payment/ipn")
