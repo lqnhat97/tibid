@@ -136,7 +136,7 @@ public class TibidController {
 		BidOrderEntity bidOrderEntity = tibidService.bidWin(id, bidInfoDto);
 		HashMap<String,Object> payload = new HashMap<>();
 		payload.put("bidInfoDto",bidInfoDto);
-		payload.put("bidOrderEnity", bidOrderEntity);
+		payload.put("bidOrderEntity", bidOrderEntity);
 		sendToTopicOrder(bidOrderEntity, payload);
 	}
 

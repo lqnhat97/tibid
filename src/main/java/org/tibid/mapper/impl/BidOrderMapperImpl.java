@@ -87,9 +87,9 @@ public class BidOrderMapperImpl implements BidOrderMapper {
 	}
 
 	@Override
-	public List<BidOrderDto> toDtoList(List<BidOrderEntity> enityList) {
+	public List<BidOrderDto> toDtoList(List<BidOrderEntity> entityList) {
 		List<BidOrderDto> result = new ArrayList<>();
-		enityList.forEach(entity -> {
+		entityList.forEach(entity -> {
 			result.add(toDto(entity));
 		});
 		return result;
