@@ -11,4 +11,8 @@ public class BidInfoDto {
 	private long userId;
 
 	private float price;
+
+	private String userName;
+
+	private String userAvatar;
 }

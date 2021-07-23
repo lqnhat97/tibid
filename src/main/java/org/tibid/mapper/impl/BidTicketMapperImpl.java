@@ -16,7 +16,8 @@ public class BidTicketMapperImpl implements BidTicketMapper {
 		dto.setPrice(entity.getPrice());
 		dto.setStatus(entity.getStatus());
 		dto.setCreatedAt(entity.getCreatedDate());
-		dto.setModifiedAt(entity.getUpdatedDate());
+		dto.setUserName(entity.getUserName());
+		dto.setUserAvatar(entity.getUserAvatar());
 		return dto;
 	}
 
@@ -29,6 +30,8 @@ public class BidTicketMapperImpl implements BidTicketMapper {
 		entity.setBidOrderId(dto.getBidOrderId());
 		entity.setPrice(dto.getPrice());
 		entity.setStatus(dto.getStatus());
+		entity.setUserName(dto.getUserName());
+		entity.setUserAvatar(dto.getUserAvatar());
 		return entity;
 	}
 }
