@@ -48,7 +48,6 @@ public class JpaConfig {
 		dataSource.setUrl(Preconditions.checkNotNull(env.getProperty("spring.datasource.url")));
 		dataSource.setUsername(Preconditions.checkNotNull(env.getProperty("spring.datasource.username")));
 		dataSource.setPassword(Preconditions.checkNotNull(env.getProperty("spring.datasource.password")));
-
 		return dataSource;
 	}
 

@@ -1,9 +1,9 @@
 spring:
   jpa:
-    database-platform: org.hibernate.dialect.MariaDB103Dialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MariaDB103Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
         hbm2ddl:
           auto: create-drop
         cache:
@@ -26,10 +26,17 @@ spring:
         bidorder: bid_order_status
         bidticket: bid_ticket_status
   datasource:
-    url: jdbc:mariadb://localhost:9083/tibid
-    driver-class-name: org.mariadb.jdbc.Driver
-    username: tibid
+    user: tibid
     password: tibid
+    url: jdbc:mysql://35.240.222.157:3306/tbid
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    continue-on-error: true
+    initialization-mode: always
+  cloud:
+    gcp:
+      sql:
+        instance-connection-name: hackathon-15-tibid:asia-southeast1:tibid
+        database-name: tbid
 
 tiki:
   base-url: https://api.tiki.vn/tiniapp-open-api

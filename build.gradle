@@ -1,16 +1,39 @@
+buildscript {    // Configuration for building
+    repositories {
+        jcenter()    // Bintray's repository - a fast Maven Central mirror & more
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.2.0' // If a newer version is available, use it
+    }
+}
+
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version "${versionSpringBoot}"
 }
 
-group 'org.tibid'
-version '1.0-SNAPSHOT'
-
-repositories {
+repositories {   // repositories for Jar's you access in your code
     mavenCentral()
+    jcenter()
 }
 
+
+group 'org.tibid'
+version '1.2-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
+apply plugin: 'com.google.cloud.tools.appengine'
+
 dependencies {
+    compile 'com.google.appengine:appengine-api-1.0-sdk:+'  // Latest App Engine Api's
+//    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+
+    compile 'jstl:jstl:1.2'
+
     annotationProcessor "org.projectlombok:lombok:$versionLombok"
     compileOnly "org.projectlombok:lombok:$versionLombok"
     compile('org.springframework.boot:spring-boot-starter')
@@ -32,18 +55,27 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpcore'
     implementation 'commons-codec:commons-codec'
     implementation 'org.apache.commons:commons-pool2:2.4.2'
-
+    compile 'com.google.cloud.sql:mysql-socket-factory-connector-j-8:1.3.1'
+    implementation 'com.google.cloud:spring-cloud-gcp-starter-sql-mysql:2.0.3'
     annotationProcessor 'com.querydsl:querydsl-apt::jpa',
             'com.querydsl:querydsl-apt',
             'com.querydsl:querydsl-jpa',
             'org.springframework.boot:spring-boot-starter-data-jpa'
 
+//    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.17'
     runtime 'com.h2database:h2'
 }
 
+appengine {  // App Engine tasks configuration
+    deploy {   // deploy configuration
+        projectId = 'hackathon-15-tibid'
+        version = '1'
+    }
+}
 test {
     useJUnitPlatform()
 }
 
-apply plugin: 'java'
-apply plugin: 'io.spring.dependency-management'
+sourceCompatibility = 1.8     // App Engine Flexible uses Java 8
+targetCompatibility = 1.8     // App Engine Flexible uses Java 8
+

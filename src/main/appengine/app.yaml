@@ -1,0 +1,4 @@
+runtime: java11
+env: flex
+instance_class: F1
+entrypoint: java -noverify -jar tibid-1.2-SNAPSHOT.jar
