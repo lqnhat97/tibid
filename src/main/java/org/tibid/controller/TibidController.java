@@ -21,8 +21,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.tibid.dto.BidInfoDto;
+import org.tibid.dto.BidOrderDetailDto;
 import org.tibid.dto.BidOrderDto;
-import org.tibid.dto.BidTicketDetailDto;
+import org.tibid.dto.BidTicketLastDetailDto;
 import org.tibid.dto.BidTicketDto;
 import org.tibid.entity.BidOrderEntity;
 import org.tibid.entity.tiki.Order;
@@ -79,7 +80,7 @@ public class TibidController {
 	}
 
 	@GetMapping("/orders/{id}")
-	public ResponseEntity<BidOrderDto> getOrderById(@PathVariable long id) {
+	public ResponseEntity<BidOrderDetailDto> getOrderById(@PathVariable long id) {
 		return new ResponseEntity<>(tibidService.getOrderById(id), HttpStatus.OK);
 	}
 
@@ -116,7 +117,7 @@ public class TibidController {
 	}
 
 	@GetMapping("/tickets/search")
-	public ResponseEntity<List<BidTicketDetailDto>> getUserTicketByStatus(@RequestParam long userId, @RequestParam int status) {
+	public ResponseEntity<List<BidTicketLastDetailDto>> getUserTicketByStatus(@RequestParam long userId, @RequestParam int status) {
 		return new ResponseEntity<>(tibidService.getTicketDetailByUserId(userId, status), HttpStatus.OK);
 	}
 

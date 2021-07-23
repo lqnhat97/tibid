@@ -6,6 +6,6 @@ import org.tibid.dto.BidOrderDto;
 import org.tibid.entity.BidOrderEntity;
 
 public interface BidOrderMapper extends BaseMapper<BidOrderDto, BidOrderEntity> {
-	List<BidOrderDto> toDtoList(List<BidOrderEntity> enityList);
+	List<BidOrderDto> toDtoList(List<BidOrderEntity> entityList);
 
 }

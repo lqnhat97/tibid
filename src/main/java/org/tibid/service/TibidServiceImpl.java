@@ -10,10 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tibid.dto.BidInfoDto;
+import org.tibid.dto.BidOrderDetailDto;
 import org.tibid.dto.BidOrderDto;
-import org.tibid.dto.BidTicketDetailDto;
 import org.tibid.dto.BidTicketDto;
 import org.tibid.entity.BidOrderEntity;
+import org.tibid.dto.BidTicketLastDetailDto;
 import org.tibid.entity.BidTicketEntity;
 import org.tibid.entity.tiki.Order;
 import org.tibid.entity.tiki.ipn.request.IpnRequest;
@@ -64,8 +65,17 @@ public class TibidServiceImpl implements TibidService {
 	}
 
 	@Override
-	public BidOrderDto getOrderById(long id) {
-		return Optional.ofNullable(bidOrderMapper.toDto(bidOrderRepo.findById(id).get())).orElse(null);
+	public BidOrderDetailDto getOrderById(long id) {
+		BidOrderEntity entity = bidOrderRepo.findById(id).get();
+		List<BidTicketEntity> lastFiveTickets = bidTicketRepo.findLimitTicketsByOrderId(entity.getId(), 5);
+		List<BidTicketDto> ticketDtoList = new ArrayList<>();
+		lastFiveTickets.stream().forEach(bidTicketEntity -> {
+			ticketDtoList.add(bidTicketMapper.toDto(bidTicketEntity));
+		});
+		return BidOrderDetailDto.builder()
+				.bidOrder(bidOrderMapper.toDto(entity))
+				.bidHistory(ticketDtoList)
+				.build();
 	}
 
 	@Override
@@ -120,10 +130,10 @@ public class TibidServiceImpl implements TibidService {
 	}
 
 	@Override
-	public List<BidTicketDetailDto> getTicketDetailByUserId(long userId, int status) {
-		List<BidTicketDetailDto> result = new ArrayList<>();
+	public List<BidTicketLastDetailDto> getTicketDetailByUserId(long userId, int status) {
+		List<BidTicketLastDetailDto> result = new ArrayList<>();
 		bidOrderRepo.findByUserBidingIdAndStatus(userId, status).forEach(bidOrderEnity -> {
-			result.add(BidTicketDetailDto.builder()
+			result.add(BidTicketLastDetailDto.builder()
 					.orderDto(bidOrderMapper.toDto(bidOrderEnity))
 					.ticketDto(this.getLastestTicketOfUser(userId, bidOrderEnity.getId(), status))
 					.build());
